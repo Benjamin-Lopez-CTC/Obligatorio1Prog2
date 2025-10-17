@@ -1,1 +1,0 @@
-para ocupar espacio hasta que subamos algo de verdad
