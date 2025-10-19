@@ -14,11 +14,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Usuario\\source\\repos\\Obli1Prog2\\Obli1Prog2\\Obli1Prog2.csproj",
+      "projectUniqueName": "C:\\Users\\Usuario\\Desktop\\Cosas de Benja\\Prog\\Repos\\Obli1Prog2\\Obli1Prog2\\Obli1Prog2.csproj",
       "projectName": "Obli1Prog2",
-      "projectPath": "C:\\Users\\Usuario\\source\\repos\\Obli1Prog2\\Obli1Prog2\\Obli1Prog2.csproj",
+      "projectPath": "C:\\Users\\Usuario\\Desktop\\Cosas de Benja\\Prog\\Repos\\Obli1Prog2\\Obli1Prog2\\Obli1Prog2.csproj",
       "packagesPath": "C:\\Users\\Usuario\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Usuario\\source\\repos\\Obli1Prog2\\Obli1Prog2\\obj\\",
+      "outputPath": "C:\\Users\\Usuario\\Desktop\\Cosas de Benja\\Prog\\Repos\\Obli1Prog2\\Obli1Prog2\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

@@ -1,9 +1,12 @@
 ﻿// Program.cs
+using Obli1Prog2;
 using System.Collections.Generic;
+using System.Linq;
 
 bool salir = false;
+List<Pacientes> listaPacientes = new();
 
-do 
+do
 {
     MostrarMenuPrincipal();
 
@@ -39,6 +42,7 @@ do
 }
 while (!salir);
 
+#region Metodos
 void MostrarMenuPrincipal()
 {
     Console.Clear();
@@ -53,7 +57,7 @@ void MostrarMenuPrincipal()
 
 void GestionUsuarios()
 {
-    bool volver1 = false;
+    bool volver = false;
 
     do
     {
@@ -70,7 +74,7 @@ void GestionUsuarios()
         switch (opcion)
         {
             case "1":
-                //RegistrarUsuario();
+                RegistrarPaciente();
                 break;
 
             case "2":
@@ -82,7 +86,7 @@ void GestionUsuarios()
                 break;
 
             case "0":
-                volver1 = true;
+                volver = true;
                 break;
 
             default:
@@ -90,12 +94,12 @@ void GestionUsuarios()
                 Console.ReadKey();
                 break;
         }
-    } while (!volver1);
+    } while (!volver);
 }
 
 void GestionTurnos() 
 {
-    bool volver2 = false;
+    bool volver = false;
     do
     {
         Console.Clear();
@@ -128,20 +132,20 @@ void GestionTurnos()
                 //HistorialConsultas();
                 break;
             case "0":
-                volver2 = true;
+                volver = true;
                 break;
             default:
                 Console.WriteLine("Valor no valido. Presione una tecla para continuar...");
                 Console.ReadKey().KeyChar.ToString();
                 break;
         }
-    } while (!volver2);
+    } while (!volver);
 
 }
 
 void Pagos() 
 {
-    bool volver3 = false;
+    bool volver = false;
     do
     {
         Console.Clear();
@@ -169,7 +173,7 @@ void Pagos()
                 break;
 
             case "0":
-                volver3 = true;
+                volver = true;
                 break;
 
             default:
@@ -177,12 +181,12 @@ void Pagos()
                 Console.ReadKey().KeyChar.ToString();
                 break;
         }
-    } while (!volver3);
+    } while (!volver);
 }
 
 void EstadisticasReportes() 
 {
-    bool volver4 = false;
+    bool volver = false;
     do
     {
         Console.Clear();
@@ -211,7 +215,7 @@ void EstadisticasReportes()
                 //MedicosConsultados();
                 break;
             case "0":
-                volver4 = true;
+                volver = true;
                 break;
             default:
                 Console.WriteLine("Valor no valido. Presiona una tecla para continuar...");
@@ -219,5 +223,187 @@ void EstadisticasReportes()
                 break;
 
         }
-    } while (!volver4);
+    } while (!volver);
+}
+
+// Metodo para registrar un paciente nuevo, el ID es autonumerico
+void RegistrarPaciente()
+{
+        // Limpia la pantalla y muestra el cabezal de la seccion
+        Console.Clear();
+        Console.WriteLine("===== Registrar nuevo paciente =====\n");
+        // Captura todos los datos del paciente nuevo
+        string nombre = LeerTexto("Nombre");
+        string apellido = LeerTexto("Apellido");
+        int numDocumento = LeerDocumento();
+        DateOnly fechaNacimiento = LeerFecha("Fecha de nacimiento");
+        int telefono = LeerEntero("Telefono");
+        string email = LeerEmail();
+        string obraSocial = LeerTexto("Obra social");
+        string nombreUsuario = LeerTexto("Nombre de usuario");
+        string contrasenia = LeerContrasenia();
+        
+        // Guarda todos los datos en un nuevo paciente y lo añade a la lista de paciente
+        listaPacientes.Add(new Pacientes(nombre, apellido, numDocumento, fechaNacimiento, telefono, email, obraSocial, nombreUsuario, contrasenia));
+
+        // PARA PROBAR SI FUNCIONA //
+        foreach (Pacientes paciente in listaPacientes)
+        {
+            Console.WriteLine(paciente);
+        }
+    Console.WriteLine("Presione una tecla para continuar...");
+    Console.ReadKey();
+}
+
+// Metodo para ingresar un string de texto
+string LeerTexto(string campo)
+{
+    string? valor;
+    do
+    {
+        Console.WriteLine($"{campo}: ");
+        valor = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(valor))
+            Console.WriteLine($"El campo '{campo}' no puede estar vacio.");
+    } while (string.IsNullOrWhiteSpace(valor));
+    return valor;
+}
+
+// Metodo para ingresar un numero entero
+int LeerEntero(string campo)
+{
+    int valor;
+    string? entrada;
+    do
+    {
+        Console.WriteLine($"{campo}: ");
+        entrada = Console.ReadLine()?.Trim();
+        if (!int.TryParse(entrada, out valor))
+            Console.WriteLine("El valor ingresado no es un numero, intente nuevamente.");
+        else if (valor <= 0)
+            Console.WriteLine("El valor ingresado no puede ser menor a 0, intente nuevamente.");
+        else if (string.IsNullOrWhiteSpace(entrada))
+            Console.WriteLine($"El campo '{campo}' no puede estar vacio.");
+    } while (!int.TryParse(entrada, out valor) || valor <= 0 || string.IsNullOrWhiteSpace(entrada));
+    return valor;
+}
+
+// Funcion para ingresar una fecha de tipo DateOnly
+DateOnly LeerFecha(string campo)
+{
+    bool resultado1;
+    bool resultado2;
+    bool resultado3;
+    int dia;
+    int mes;
+    int anio;
+
+    // Bucle para el año, con sus validaciones respectivas
+    do
+    {
+        Console.WriteLine($"{campo}: ");
+        Console.Write("Ingrese el año:");
+        resultado3 = int.TryParse(Console.ReadLine()?.Trim(), out anio);
+        if (!resultado3)
+            Console.WriteLine("El año ingresado no es un numero. Intente nuevamente.");
+        else if (anio < 0)
+            Console.WriteLine("El año ingresado no puede ser menor a 0. Intente nuevamente.");
+    } while (!resultado3 || anio < 0);
+
+    // Bucle para el mes, con validaciones respectivas.
+    do
+    {
+        Console.Write("Ingrese el mes: ");
+        resultado1 = int.TryParse(Console.ReadLine()?.Trim(), out mes);
+        if (!resultado1)
+            Console.WriteLine("El mes ingresado no es un numero. Intente nuevamente.");
+        else if (mes < 1 || mes > 12)
+            Console.WriteLine("El mes ingresado no puede ser menor a 1 o mayor que 12. Intente nuevamente.");
+    } while (!resultado1 || (mes < 1 || mes > 12));
+
+    // Bucle para el dia, con sus muchas validaciones respectivas.
+    do
+    {
+        Console.Write("Ingrese el día: ");
+        resultado2 = int.TryParse(Console.ReadLine()?.Trim(), out dia);
+        if (!resultado2)
+            Console.WriteLine("El dia ingresado no es un numero. Intente nuevamente.");
+        else if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && (dia < 1 && dia > 30))
+            Console.WriteLine("El dia ingresado no puede ser mayor a 30. Intente nuevamente.");
+        else if ((mes == 2) && DateTime.IsLeapYear(anio) && (dia < 1 && dia > 29))
+            Console.WriteLine("El dia ingresado no puede ser mayor a 29. Intente nuevamente.");
+        else if ((mes == 2) && (dia < 1 && dia > 28))
+            Console.WriteLine("El dia ingresado no puede ser mayor a 28. Intente nuevamente.");
+        else if (dia < 1 && dia > 31)
+            Console.WriteLine("El mes ingresado no puede ser mayor a 31. Intente nuevamente.");
+    } while (!resultado2 || ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && (dia < 1 && dia > 30)) || ((mes == 2) && DateTime.IsLeapYear(anio) && (dia < 1 && dia > 29)) ||
+        ((mes == 2) && (dia < 1 && dia > 28)) || (dia < 1 && dia > 31));
+
+    // Se necesita guardar en una variable tipo var el formato de calendario necesitado
+    var calendarioGregoriano = new System.Globalization.GregorianCalendar();
+    return new DateOnly(anio, mes, dia, calendarioGregoriano);
+}
+
+// Metodo para ingresar un email
+string LeerEmail() 
+{
+    string? valor;
+    do
+    {
+        Console.WriteLine("Email:");
+        valor = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(valor))
+        {
+            Console.Write("El campo no puede estar vacio.");
+        }
+        else if (!valor.Contains('@') || !valor.Contains('.'))
+        {
+            Console.WriteLine("Ingrese un email válido.");
+        }
+    } while (string.IsNullOrWhiteSpace(valor) || (!valor.Contains('@') || !valor.Contains('.')));
+    return valor;
+}
+
+// Metodo para ingresar una contraseña
+string LeerContrasenia() 
+{
+    string? valor;
+    do
+    {
+        Console.WriteLine("Contraseña:");
+        valor = Console.ReadLine()?.Trim();
+
+        if (string.IsNullOrWhiteSpace(valor))
+        {
+            Console.WriteLine("El campo no puede estar vacio");
+        } 
+        else if (valor.Length < 8)
+        {
+            Console.WriteLine("La contraseña debe tener mas de 8 caracteres");
+        }
+    } while (string.IsNullOrWhiteSpace(valor) || valor.Length < 8);
+    return valor;
+}
+#endregion
+
+// Metodo para ingresar un documento de identidad
+int LeerDocumento()
+{
+    int documento;
+    string? entrada;
+
+    do
+    {
+        Console.WriteLine("Documento de identidad: ");
+        entrada = Console.ReadLine()?.Trim();
+        if (string.IsNullOrWhiteSpace(entrada))
+            Console.WriteLine("El documento ingresado no puede ser nulo. Intente nuevamente.");
+        else if (!int.TryParse(entrada, out documento))
+            Console.WriteLine("El documento ingresado no es un numero. Intente nuevamente.");
+        else if (entrada.Length != 8)
+            Console.WriteLine("El documento ingresado tiene que tener un largo de 8 digitos. Intente nuevamente.");
+    } while (string.IsNullOrWhiteSpace(entrada) || !int.TryParse(entrada, out documento) || (entrada.Length != 8));
+    return documento;
 }
