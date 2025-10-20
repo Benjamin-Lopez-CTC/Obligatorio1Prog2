@@ -4,13 +4,18 @@ using System.Collections.Generic;
 using System.Linq;
 
 bool salir = false;
-List<Pacientes> listaPacientes = new();
+List<Pacientes> listaPacientes = Pacientes.CargarPacientes();
+List<Medicos> listaMedicos = new();
+List<Recepcionistas> listaRecepcionistas = Recepcionistas.CargarReps();
+Dictionary<string, string> contrReps = GuardarContrReps();
+
+Login();
 
 do
 {
     MostrarMenuPrincipal();
 
-    Console.WriteLine("Seleccione una opción: ");
+    Console.Write("Seleccione una opción: ");
     string opcion = Console.ReadKey().KeyChar.ToString();
     switch (opcion) 
     {
@@ -31,6 +36,8 @@ do
             break;
 
         case "0":
+            Console.Clear();
+            Console.WriteLine("Saliendo...");
             salir = true;
             break;
 
@@ -43,6 +50,42 @@ do
 while (!salir);
 
 #region Metodos
+
+// Metodo para hacer login y recibir acceso a todas las opciones del programa
+void Login()
+{
+    string? usuario;
+    string? contrasenia;
+
+    do
+    {
+        do
+        {
+            Console.Clear();
+            Console.WriteLine("===== Bienvenido a la Clínica Vida Sana =====");
+
+            usuario = LeerTexto("Ingrese su nombre de usuario");
+            if (!contrReps.ContainsKey(usuario))
+            {
+                Console.WriteLine("El usuario ingresado no existe. Presione una tecla para continuar...");
+                Console.ReadKey();
+            }
+        } while (!contrReps.ContainsKey(usuario));
+
+        contrasenia = LeerTexto("Contraseña");
+        if (contrReps[usuario] != contrasenia)
+        {
+            Console.WriteLine("Contraseña incorrecta. Presione una tecla para continuar...");
+            Console.ReadKey();
+        }
+        else
+        {
+            break;
+        }
+    } while (contrReps[usuario] != contrasenia);
+}
+
+// Menu principal que se muestra despues de hacer login
 void MostrarMenuPrincipal()
 {
     Console.Clear();
@@ -55,6 +98,7 @@ void MostrarMenuPrincipal()
     Console.WriteLine("");
 }
 
+// Menu 1: Gestion de usuarios
 void GestionUsuarios()
 {
     bool volver = false;
@@ -64,12 +108,11 @@ void GestionUsuarios()
         Console.Clear();
         Console.WriteLine("===== Gestión de usuarios =====");
         Console.WriteLine("1. Registrar nuevo paciente");
-        Console.WriteLine("2. Login de administrativos");
-        Console.WriteLine("3. Cambiar contraseña");
+        Console.WriteLine("2. Cambiar contraseña");
         Console.WriteLine("0. Volver");
         Console.WriteLine("");
 
-        Console.WriteLine("Seleccione una opción: ");
+        Console.Write("Seleccione una opción: ");
         string opcion = Console.ReadKey().KeyChar.ToString();
         switch (opcion)
         {
@@ -78,11 +121,7 @@ void GestionUsuarios()
                 break;
 
             case "2":
-                //LoginAdmin();
-                break;
-
-            case "3":
-                //CambiarPassWord();
+                //CambiarContr();
                 break;
 
             case "0":
@@ -97,6 +136,7 @@ void GestionUsuarios()
     } while (!volver);
 }
 
+// Menu 2: Gestion de turnos
 void GestionTurnos() 
 {
     bool volver = false;
@@ -112,7 +152,7 @@ void GestionTurnos()
         Console.WriteLine("0. Volver");
         Console.WriteLine("");
 
-        Console.WriteLine("Seleccione una opción: ");
+        Console.Write("Seleccione una opción: ");
         string opcion = Console.ReadKey().KeyChar.ToString();
         switch (opcion) 
         {
@@ -143,6 +183,7 @@ void GestionTurnos()
 
 }
 
+// Menu 3: Gestion de pagos
 void Pagos() 
 {
     bool volver = false;
@@ -156,7 +197,7 @@ void Pagos()
         Console.WriteLine("0. Volver");
         Console.WriteLine("");
 
-        Console.WriteLine("Seleccione una opción: ");
+        Console.Write("Seleccione una opción: ");
         string opcion = Console.ReadKey().KeyChar.ToString();
         switch (opcion)
         {
@@ -184,6 +225,7 @@ void Pagos()
     } while (!volver);
 }
 
+// Menu 4: Estadisticas y reportes
 void EstadisticasReportes() 
 {
     bool volver = false;
@@ -198,15 +240,15 @@ void EstadisticasReportes()
         Console.WriteLine("0. Volver");
         Console.WriteLine("");
 
-        Console.WriteLine("Seleccione una opción.");
+        Console.Write("Seleccione una opción:");
         string opcion = Console.ReadKey().KeyChar.ToString();
         switch (opcion) 
         {
             case "1":
-                //ListadoPacientes();
+                ListadoPacientes();
                 break;
             case "2":
-                //ListadoMedicos();
+                // ListadoMedicos(); // Aunque exista el metodo todavia no terminamos de ver como se guardan algunos datos.
                 break;
             case "3":
                 //ConsultasFrecuentes();
@@ -218,7 +260,7 @@ void EstadisticasReportes()
                 volver = true;
                 break;
             default:
-                Console.WriteLine("Valor no valido. Presiona una tecla para continuar...");
+                Console.Write("Valor no válido. Presiona una tecla para continuar...");
                 Console.ReadKey();
                 break;
 
@@ -229,29 +271,25 @@ void EstadisticasReportes()
 // Metodo para registrar un paciente nuevo, el ID es autonumerico
 void RegistrarPaciente()
 {
-        // Limpia la pantalla y muestra el cabezal de la seccion
-        Console.Clear();
-        Console.WriteLine("===== Registrar nuevo paciente =====\n");
-        // Captura todos los datos del paciente nuevo
-        string nombre = LeerTexto("Nombre");
-        string apellido = LeerTexto("Apellido");
-        int numDocumento = LeerDocumento();
-        DateOnly fechaNacimiento = LeerFecha("Fecha de nacimiento");
-        int telefono = LeerEntero("Telefono");
-        string email = LeerEmail();
-        string obraSocial = LeerTexto("Obra social");
-        string nombreUsuario = LeerTexto("Nombre de usuario");
-        string contrasenia = LeerContrasenia();
-        
-        // Guarda todos los datos en un nuevo paciente y lo añade a la lista de paciente
-        listaPacientes.Add(new Pacientes(nombre, apellido, numDocumento, fechaNacimiento, telefono, email, obraSocial, nombreUsuario, contrasenia));
+    // Limpia la pantalla y muestra el cabezal de la seccion
+    Console.Clear();
+    Console.WriteLine("===== Registrar nuevo paciente =====\n");
 
-        // PARA PROBAR SI FUNCIONA //
-        foreach (Pacientes paciente in listaPacientes)
-        {
-            Console.WriteLine(paciente);
-        }
-    Console.WriteLine("Presione una tecla para continuar...");
+    // Captura todos los datos del paciente nuevo
+    string nombre = LeerTexto("Nombre");
+    string apellido = LeerTexto("Apellido");
+    int numDocumento = LeerDocumento();
+    DateOnly fechaNacimiento = LeerFecha("Fecha de nacimiento");
+    int telefono = LeerEntero("Telefono");
+    string email = LeerEmail();
+    string obraSocial = LeerTexto("Obra social");
+    string nombreUsuario = LeerTexto("Nombre de usuario");
+    string contrasenia = LeerContrasenia();
+        
+    // Guarda todos los datos en un nuevo paciente y lo añade a la lista de paciente
+    listaPacientes.Add(new Pacientes(nombre, apellido, numDocumento, fechaNacimiento, telefono, email, obraSocial, nombreUsuario, contrasenia));
+    
+    Console.Write("Paciente agregado exitosamente. Presione una tecla para continuar...");
     Console.ReadKey();
 }
 
@@ -261,7 +299,7 @@ string LeerTexto(string campo)
     string? valor;
     do
     {
-        Console.WriteLine($"{campo}: ");
+        Console.Write($"{campo}: ");
         valor = Console.ReadLine()?.Trim();
 
         if (string.IsNullOrWhiteSpace(valor))
@@ -386,7 +424,6 @@ string LeerContrasenia()
     } while (string.IsNullOrWhiteSpace(valor) || valor.Length < 8);
     return valor;
 }
-#endregion
 
 // Metodo para ingresar un documento de identidad
 int LeerDocumento()
@@ -407,3 +444,42 @@ int LeerDocumento()
     } while (string.IsNullOrWhiteSpace(entrada) || !int.TryParse(entrada, out documento) || (entrada.Length != 8));
     return documento;
 }
+
+// Metodo para listar todos los pacientes
+void ListadoPacientes()
+{
+    Console.Clear();
+    Console.WriteLine("=== Listado de pacientes ===");
+    foreach (var paciente in listaPacientes)
+    {
+        Console.WriteLine(paciente + $"\n");
+    }
+    Console.Write("Presione cualquier tecla para volver...");
+    Console.ReadKey();
+}
+
+// Metodo para listar todos los medicos
+void ListadoMedicos()
+{
+    Console.Clear();
+    Console.WriteLine("=== Listado de médicos ===");
+    foreach (var medico in listaMedicos)
+    {
+        Console.WriteLine(medico);
+    }
+}
+
+/* Metodo que devuelve un diccionario de clave string y valor string con los usuarios y contraseñas de todos los
+ * recepcionistas administrativos presentes en la lista listaRecepcionistas 
+ */
+Dictionary<string, string> GuardarContrReps()
+{
+    Dictionary<string, string> contrReps = new Dictionary<string, string>();
+    foreach (Recepcionistas rep in listaRecepcionistas)
+    {
+        contrReps.Add(rep.NombreUsuarioR, rep.ContraseniaR);
+    }
+    return contrReps;
+}
+
+#endregion

@@ -47,6 +47,17 @@ namespace Obli1Prog2
         {
         return$"Paciente: ID: {IdPaciente}, Nombre: {NombreP}, Apellido: {ApellidoP}, Numero de documento: {NumDocumento}, Fecha de nacimiento: {FechaNacimiento}, Telefono: {Telefono}, Email: {Email}, Obra social: {ObraSocial}";
         }
+
+        // Metodo de carga de datos para el arranque
+        public static List<Pacientes> CargarPacientes()
+        {
+            return new List<Pacientes> {
+                new Pacientes("María", "González", 34567891, new DateOnly(1985, 4, 12), 114567890, "maria.gonzalez@gmail.com", "OSDE", "mariagon", "M4r!a2023"),
+                new Pacientes("Santiago", "Fernández", 27894563, new DateOnly(1992, 11, 3), 299412345, "santiago.fernandez@gmail.com", "Swiss Medical", "santi_f", "Santi#92"),
+                new Pacientes("Lucía", "Martínez", 41235678, new DateOnly(2000, 6, 21), 115123456, "lucia.martinez@gmail.com", "Galeno", "luciam", "Luci@2000"),
+                new Pacientes("Diego", "Rossi", 19876543, new DateOnly(1978, 1, 9), 298412399, "diego.rossi@gmail.com", "Sin Obra Social", "drossi", "D!e9go78")
+            };
+        }
         #endregion
     }
 }

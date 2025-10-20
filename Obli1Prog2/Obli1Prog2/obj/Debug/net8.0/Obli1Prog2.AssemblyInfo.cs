@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("Obli1Prog2")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+9ca7db91b5411330c8affb8c949d59c2beb7d19e")]
 [assembly: System.Reflection.AssemblyProductAttribute("Obli1Prog2")]
 [assembly: System.Reflection.AssemblyTitleAttribute("Obli1Prog2")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
