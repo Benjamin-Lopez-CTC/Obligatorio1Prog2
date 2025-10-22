@@ -2,11 +2,14 @@
 using Obli1Prog2;
 using System.Collections.Generic;
 using System.Linq;
+using System.Globalization;
 
 bool salir = false;
 List<Pacientes> listaPacientes = Pacientes.CargarPacientes();
-List<Medicos> listaMedicos = new();
+List<Medicos> listaMedicos = Medicos.CargarMedicos();
 List<Recepcionistas> listaRecepcionistas = Recepcionistas.CargarReps();
+List<Turnos> listaTurnos = Turnos.CargarTurnos();
+List<Pagos> listaPagos = Pagos.CargarPagos();
 Dictionary<string, string> contrReps = GuardarContrReps();
 
 Login();
@@ -28,7 +31,7 @@ do
             break;
 
         case "3":
-            Pagos();
+            MenuPagos();
             break;
 
         case "4":
@@ -188,7 +191,7 @@ void GestionTurnos()
 }
 
 // Menu 3: Gestion de pagos
-void Pagos()
+void MenuPagos()
 {
     bool volver = false;
     do
@@ -365,6 +368,130 @@ void CambiarCont()
 }
 #endregion
 
+#region Metodos menú 2
+//Metodo para elegir ver disponibilidad por medico o especialidad
+void VerDisponibilidad() 
+{
+    bool volver = false;
+    do
+    {
+        Console.Clear();
+        Console.WriteLine("===== Disponibilidad =====");
+        Console.WriteLine("1. Por médico");
+        Console.WriteLine("2. Por especialidad");
+        Console.WriteLine("0. Volver");
+        Console.WriteLine("");
+
+        Console.Write("Seleccione una opción: ");
+        string opcion = Console.ReadKey().KeyChar.ToString();
+        switch (opcion)
+        {
+            case "1":
+                DisponibilidadMed();
+                break;
+            case "2":
+                DisponibilidadEsp();
+                break;
+            case "0":
+                volver = true;
+                break;
+            default:
+                Console.WriteLine("Valor no válido. Presione una tecla para continuar...");
+                Console.ReadKey().KeyChar.ToString();
+                break;
+        }
+    } while (!volver);
+}
+
+//Metodo para cer disponibilidad por medico
+void DisponibilidadMed() 
+{
+    Console.Clear();
+    Console.WriteLine("===== Disponibilidad por médico =====");
+
+    foreach (Medicos medico in listaMedicos) 
+    {
+        var dias = medico.DiasAtencion != null ? string.Join(", ", medico.DiasAtencion) : "Sin disponibilidad";
+        var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
+        Console.Write($"Medico: {medico.Nombre} {medico.Apellido}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
+    }
+}
+
+void DisponibilidadEsp() 
+{
+    Console.Clear();
+    Console.WriteLine("===== Disponibilidad por especialidad =====");
+
+    foreach (Medicos medico in listaMedicos)
+    {
+        var dias = medico.DiasAtencion != null ? string.Join(", ", medico.DiasAtencion) : "Sin disponibilidad";
+        var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
+        Console.WriteLine($"Especialidad: {medico.Especialidad}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
+    }
+}
+
+void AgendarConsulta()
+{
+    int idPaciente;
+    int idMedico;
+    DateOnly fechaConsulta;
+    float horaConsulta;
+
+    var cultura = new System.Globalization.CultureInfo("es-ES");
+    DateOnly diaHoy = DateOnly.FromDateTime(DateTime.Today);
+
+    
+
+    // Limpia la pantalla y muestra el cabezal de la seccion
+    Console.Clear();
+    Console.WriteLine("===== Agendar nueva consulta médica =====");
+
+    // Captura todos los datos para la consulta
+
+    // Valida si el ID del paciente ingresado existe
+    do
+    {
+        idPaciente = LeerEntero("Id del paciente");
+        if (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente))
+            Console.WriteLine("No existe el paciente, intente nuevamente...");
+    } while (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente));
+
+    // Valida si el ID del medico ingresado existe
+    do
+    {
+        idMedico = LeerEntero("Id del médico");
+        if (!listaMedicos.Any(medico => medico.IdMedico == idMedico))
+            Console.WriteLine("No existe el médico, intente nuevamente...");
+    } while (!listaMedicos.Any(medico => medico.IdMedico == idMedico));
+
+    // Guarda la lista de los horarios del medico ingresado en una lista para despues confirmar si esta disponible esa hora
+    Medicos medicoAConsultar = listaMedicos.FirstOrDefault(medico => medico.IdMedico == idMedico)!;
+    float[] horariosConsulta = medicoAConsultar.HorariosDisponibles;
+
+    // Primero valida si la fecha ingresada es posterior a la fecha de mañana, y despues valida si la hora ingresada coincide con las horas disponibles del medico ingresado
+    do
+    {
+        do
+        {
+            fechaConsulta = LeerFecha("Fecha de la consulta");
+            if (fechaConsulta <= diaHoy.AddDays(1))
+                Console.WriteLine("La fecha elegida no puede ser anterior a mañana, intente nuevamente...");
+        } while (fechaConsulta <= diaHoy);
+
+        horaConsulta = LeerFlotante("Hora de la consulta");
+        if (!horariosConsulta.Any(hora => hora == horaConsulta))
+            Console.WriteLine("Esa hora no la ofrece el medico o no está disponible, intente nuevamente");
+    } while (!horariosConsulta.Any(hora => hora == horaConsulta));
+
+    // Por ultimo, guarda todos los datos en un objeto Turno y le asigna el estado como 1 (Agendado)
+    listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaConsulta, 1));
+
+    Console.Write("Consulta agendada exitosamente. Presione una tecla para continuar...");
+    Console.ReadKey();
+}
+
+#endregion
+
 #region Metodos para leer datos
 // Metodo para ingresar un string de texto
 string LeerTexto(string campo)
@@ -376,7 +503,7 @@ string LeerTexto(string campo)
         valor = Console.ReadLine()?.Trim();
 
         if (string.IsNullOrWhiteSpace(valor))
-            Console.WriteLine($"El campo '{campo}' no puede estar vacio.");
+            Console.WriteLine($"El campo '{campo}' no puede estar vacío.");
     } while (string.IsNullOrWhiteSpace(valor));
     return valor;
 }
@@ -388,15 +515,33 @@ int LeerEntero(string campo)
     string? entrada;
     do
     {
-        Console.WriteLine($"{campo}: ");
+        Console.Write($"{campo}: ");
         entrada = Console.ReadLine()?.Trim();
         if (!int.TryParse(entrada, out valor))
             Console.WriteLine("El valor ingresado no es un numero, intente nuevamente.");
         else if (valor <= 0)
             Console.WriteLine("El valor ingresado no puede ser menor a 0, intente nuevamente.");
         else if (string.IsNullOrWhiteSpace(entrada))
-            Console.WriteLine($"El campo '{campo}' no puede estar vacio.");
+            Console.WriteLine($"El campo '{campo}' no puede estar vacío.");
     } while (!int.TryParse(entrada, out valor) || valor <= 0 || string.IsNullOrWhiteSpace(entrada));
+    return valor;
+}
+
+float LeerFlotante(string campo)
+{
+    float valor;
+    string? entrada;
+    do
+    {
+        Console.Write($"{campo}: ");
+        entrada = Console.ReadLine()?.Trim();
+        if (!float.TryParse(entrada, out valor))
+            Console.WriteLine("El valor ingresado no es un numero o no es un valor válido, intente nuevamente.");
+        else if (valor <= 0)
+            Console.WriteLine("El valor ingresado no puede ser menor a 0, intente nuevamente.");
+        else if (string.IsNullOrWhiteSpace(entrada))
+            Console.WriteLine($"El campo '{campo}' no puede estar vacío");
+    } while (!float.TryParse(entrada, out valor) || valor <= 0 || string.IsNullOrWhiteSpace(entrada));
     return valor;
 }
 
@@ -483,7 +628,7 @@ string LeerContrasenia(string campo)
     string? valor;
     do
     {
-        Console.WriteLine($"{campo}:");
+        Console.Write($"{campo}: ");
         valor = Console.ReadLine()?.Trim();
 
         if (string.IsNullOrWhiteSpace(valor))
@@ -530,7 +675,7 @@ void ListadoPacientes()
     }
     else
     {
-        listaPacientes = listaPacientes.OrderBy(paciente => paciente.NombreP).ToList();
+        listaPacientes = listaPacientes.OrderBy(paciente => paciente.Nombre).ToList();
         listaPacientes.ForEach(paciente => Console.WriteLine(paciente + $"\n"));
     }
     Console.Write("Presione cualquier tecla para volver...");
@@ -556,7 +701,7 @@ Dictionary<string, string> GuardarContrReps()
     Dictionary<string, string> contrReps = new Dictionary<string, string>();
     foreach (Recepcionistas rep in listaRecepcionistas)
     {
-        contrReps.Add(rep.NombreUsuarioR, rep.ContraseniaR);
+        contrReps.Add(rep.Usuario, rep.Contrasenia);
     }
     return contrReps;
 }
