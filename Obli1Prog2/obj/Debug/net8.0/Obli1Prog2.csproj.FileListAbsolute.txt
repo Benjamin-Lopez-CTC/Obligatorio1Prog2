@@ -1,0 +1,57 @@
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.exe
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.deps.json
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.runtimeconfig.json
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfoInputs.cache
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfo.cs
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\refint\Obli1Prog2.dll
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.genruntimeconfig.cache
+C:\Users\Usuario\source\repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\ref\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.exe
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.deps.json
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.runtimeconfig.json
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfoInputs.cache
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfo.cs
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\refint\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.genruntimeconfig.cache
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\ref\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.exe
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.deps.json
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.runtimeconfig.json
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfoInputs.cache
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfo.cs
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.csproj.CoreCompileInputs.cache
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\refint\Obli1Prog2.dll
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.genruntimeconfig.cache
+C:\Users\Usuario\Desktop\Cosas de Benja\Prog\Repos\Obli1Prog2 backup\Obli1Prog2\obj\Debug\net8.0\ref\Obli1Prog2.dll
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfoInputs.cache
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.AssemblyInfo.cs
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.csproj.CoreCompileInputs.cache
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.sourcelink.json
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\refint\Obli1Prog2.dll
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.exe
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.deps.json
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.runtimeconfig.json
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.dll
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\bin\Debug\net8.0\Obli1Prog2.pdb
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\Obli1Prog2.genruntimeconfig.cache
+C:\Users\Felipe\source\repos\Benjamin-Lopez-CTC\Obligatorio1Prog2\Obli1Prog2\Obli1Prog2\obj\Debug\net8.0\ref\Obli1Prog2.dll
