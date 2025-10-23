@@ -18,7 +18,7 @@ namespace Obli1Prog2
         public int NumDocumentoP { get; set; }
         public DateOnly FechaNacimiento { get; set; }
         public int Telefono { get; set; }
-        public string Email { get; set; }
+        public string? Email { get; set; }
         public string? ObraSocial { get; set; }       
         #endregion
 

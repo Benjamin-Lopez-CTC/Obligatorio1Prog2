@@ -75,8 +75,8 @@ namespace Obli1Prog2
                     Matricula = "64574",
                     Usuario = "lucasb",
                     Contrasenia = "luc4s574",
-                    DiasAtencion = new string[] {"lunes", "miercoles", "viernes" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "miercoles", "viernes"}, TimeSpan.FromHours(9), TimeSpan.FromHours(15))
+                    DiasAtencion = new string[] {"lunes", "miércoles", "viernes" },
+                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "miércoles", "viernes"}, TimeSpan.FromHours(9), TimeSpan.FromHours(15))
                 },
                 new Medicos
                 {
@@ -87,7 +87,7 @@ namespace Obli1Prog2
                     Usuario = "mariag",
                     Contrasenia = "m4ri@g987",
                     DiasAtencion = new string[] { "martes", "jueves" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "martes"}, TimeSpan.FromHours(7), TimeSpan.FromHours(13))
+                    HorariosDisponibles = GenerarHorarios(new string[] {"martes", "jueves"}, TimeSpan.FromHours(7), TimeSpan.FromHours(13))
                 },
                 new Medicos
                 {
@@ -97,8 +97,8 @@ namespace Obli1Prog2
                     Matricula = "11223",
                     Usuario = "aleruiz",
                     Contrasenia = "al3ru!z",
-                    DiasAtencion = new string[] { "lunes", "martes", "miercoles" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "martes", "miercoles"}, TimeSpan.FromHours(9), TimeSpan.FromHours(16).Add(TimeSpan.FromMinutes(30)))
+                    DiasAtencion = new string[] { "lunes", "martes", "miércoles" },
+                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "martes", "miércoles"}, TimeSpan.FromHours(9), TimeSpan.FromHours(16).Add(TimeSpan.FromMinutes(30)))
                 },
                 new Medicos
                 {
@@ -109,7 +109,7 @@ namespace Obli1Prog2
                     Usuario = "sofiam",
                     Contrasenia = "s0fi@554",
                     DiasAtencion = new string[] { "miércoles", "viernes" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"miercoles", "viernes"}, TimeSpan.FromHours(7).Add(TimeSpan.FromMinutes(30)), TimeSpan.FromHours(13))
+                    HorariosDisponibles = GenerarHorarios(new string[] {"miércoles", "viernes"}, TimeSpan.FromHours(7).Add(TimeSpan.FromMinutes(30)), TimeSpan.FromHours(13))
                 },
                 new Medicos
                 {

@@ -59,7 +59,7 @@ namespace Obli1Prog2
                 {
                     IdPaciente = 2,
                     IdMedicos = 1,
-                    FechaTurno = new DateOnly(2025, 10, 24),
+                    FechaTurno = new DateOnly(2025, 10, 31),
                     HoraTurno = "10:00",
                     EstadoTurno = 1
                 },
@@ -83,7 +83,7 @@ namespace Obli1Prog2
                 {
                     IdPaciente = 1,
                     IdMedicos = 2,
-                    FechaTurno = new DateOnly(2025, 10, 23),
+                    FechaTurno = new DateOnly(2025, 12, 04),
                     HoraTurno = "16:00",
                     EstadoTurno = 1
                 }

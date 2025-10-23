@@ -12,6 +12,8 @@ List<Turnos> listaTurnos = Turnos.CargarTurnos();
 List<Pagos> listaPagos = Pagos.CargarPagos();
 Dictionary<string, string> contrReps = GuardarContrReps();
 
+ActualizarDatos();
+
 Login();
 
 do
@@ -782,6 +784,7 @@ int LeerDocumento()
 }
 #endregion
 
+#region Metodos Independientes
 /* Metodo que devuelve un diccionario de clave string y valor string con los usuarios y contraseñas de todos los
  * recepcionistas administrativos presentes en la lista listaRecepcionistas 
  */
@@ -794,3 +797,42 @@ Dictionary<string, string> GuardarContrReps()
     }
     return contrReps;
 }
+
+/* Metodo que recorre todos los turnos precargados y actualiza las horas que cada uno ocupa, ya que
+ * al inicializarse de esa forma los datos utilizados no cambian, llevando a poder agendar
+ * dos turnos en la misma hora
+ */
+void ActualizarDatos()
+{
+    // Recorre la lista de turnos en listaTurnos
+    foreach (Turnos turno in listaTurnos)
+    {
+        // Captura el id del paciente asignado en el turno
+        int idPaciente = turno.IdPaciente;
+        
+        // Captura el medico asignado a el turno y extrae la lista de horas del mismo
+        Medicos medicoAActualizar = listaMedicos.Find(medico => medico.IdMedico == turno.IdMedicos)!;
+        List<Hora> listaHoras = medicoAActualizar.HorariosDisponibles!;
+
+        // Obtiene el nombre del dia de la semana de la fecha del turno para verificar que el medico este atendiendo ese dia y lo pasa a español
+        var idioma = new System.Globalization.CultureInfo("es-ES");
+        var diaSemana = turno.FechaTurno.DayOfWeek;
+        var nombreDia = idioma.DateTimeFormat.GetDayName(diaSemana);
+
+        /* Solo hace el proceso en los turnos que tengan estado 1 (Agendado), ya que 2 indica que fue realizado el turno
+            y 3 indica que fue cancelado, ambos liberando devuelta el horario asignado */
+        if (turno.EstadoTurno == 1)
+        {
+            // Revisa si la hora existe y es del dia indicado
+            if (listaHoras.Exists(hora => (hora.HoraConsulta == turno.HoraTurno) && (hora.DiaConsulta == nombreDia)))
+            {
+                var horaAModificar = listaHoras.FirstOrDefault(hora => (hora.HoraConsulta == turno.HoraTurno) && (hora.DiaConsulta == nombreDia))!;
+                if (horaAModificar.IdPaciente == 0)
+                {
+                    horaAModificar.IdPaciente = idPaciente;
+                }
+            }
+        }
+    }
+}
+#endregion
