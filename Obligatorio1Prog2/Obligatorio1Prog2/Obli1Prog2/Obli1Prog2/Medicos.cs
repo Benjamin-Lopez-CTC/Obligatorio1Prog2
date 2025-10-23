@@ -14,15 +14,15 @@ namespace Obli1Prog2
 
         #region Propiedades
         public int IdMedico { get; private set; }
-        public string? Especialidad { get; set; }
-        public string? Matricula { get; set; }
-        public string[]? DiasAtencion { get; set; }
-        public List<Hora>? HorariosDisponibles { get; set; }
+        public string Especialidad { get; set; }
+        public string Matricula { get; set; }
+        public string[] DiasAtencion { get; set; }
+        public float[] HorariosDisponibles { get; set; }
         #endregion
 
         #region Constructores
         public Medicos(string nombre, string apellido, string especialidad, string matricula,
-            string nombreUsuario, string contrasenia, string[] diasAtencion, List<Hora> horariosDisponibles) : base(nombre, apellido, nombreUsuario, contrasenia)
+            string nombreUsuario, string contrasenia, string[] diasAtencion, float[] horariosDisponibles) : base(nombre, apellido, nombreUsuario, contrasenia)
         {
             IdMedico = ContadorID++;
             Nombre = nombre;
@@ -49,20 +49,6 @@ namespace Obli1Prog2
             return $"Médico: ID: {IdMedico}, Nombre: {Nombre}, Apellido {Apellido}, Especialidad: {Especialidad}, Matricula: {Matricula}, Dias de atención: {dias}, Horarios: {horas}";
         }
 
-        private static List<Hora> GenerarHorarios(string[] dias, TimeSpan inicio, TimeSpan fin)
-        {
-            var lista = new List<Hora>();
-            for (var t = inicio; t <= fin; t = t.Add(TimeSpan.FromMinutes(30)))
-            {
-                string horaStr = t.ToString(@"h\:mm");
-                foreach (var dia in dias)
-                {
-                    lista.Add(new Hora(horaStr, dia, 0));
-                }
-            }
-            return lista;
-        }
-
         public static List<Medicos> CargarMedicos()
         {
             return new List<Medicos>
@@ -76,7 +62,7 @@ namespace Obli1Prog2
                     Usuario = "lucasb",
                     Contrasenia = "luc4s574",
                     DiasAtencion = new string[] {"lunes", "miercoles", "viernes" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "miercoles", "viernes"}, TimeSpan.FromHours(9), TimeSpan.FromHours(15))
+                    HorariosDisponibles = new float [] { 9.30f, 10.00f, 10.30f, 11.00f, 11.30f, 12.00f, 12.30f, 13.00f, 13.30f, 14.00f, 14.30f, 15.00f, 15.30f }
                 },
                 new Medicos
                 {
@@ -87,7 +73,7 @@ namespace Obli1Prog2
                     Usuario = "mariag",
                     Contrasenia = "m4ri@g987",
                     DiasAtencion = new string[] { "martes", "jueves" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "martes"}, TimeSpan.FromHours(7), TimeSpan.FromHours(13))
+                    HorariosDisponibles = new float[] { 8.00f, 8.30f, 9.00f, 9.30f, 10.00f, 10.30f, 11.00f, 11.30f, 12.00f, 12.30f, 13.00f, 13.30f }
                 },
                 new Medicos
                 {
@@ -98,7 +84,7 @@ namespace Obli1Prog2
                     Usuario = "aleruiz",
                     Contrasenia = "al3ru!z",
                     DiasAtencion = new string[] { "lunes", "martes", "miercoles" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "martes", "miercoles"}, TimeSpan.FromHours(9), TimeSpan.FromHours(16).Add(TimeSpan.FromMinutes(30)))
+                    HorariosDisponibles = new float[] { 9.00f, 9.30f, 10.00f, 10.30f, 11.00f, 11.30f, 12.00f, 12.30f, 13.00f, 13.30f, 14.00f, 14.30f, 15.00f, 15.30f, 16.00f, 16.30f }
                 },
                 new Medicos
                 {
@@ -109,7 +95,7 @@ namespace Obli1Prog2
                     Usuario = "sofiam",
                     Contrasenia = "s0fi@554",
                     DiasAtencion = new string[] { "miércoles", "viernes" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"miercoles", "viernes"}, TimeSpan.FromHours(7).Add(TimeSpan.FromMinutes(30)), TimeSpan.FromHours(13))
+                    HorariosDisponibles = new float[] { 7.30f, 8.00f, 8.30f, 9.00f, 9.30f, 10.00f, 10.30f, 11.00f, 11.30f, 12.00f, 12.30f, 13.00f }
                 },
                 new Medicos
                 {
@@ -120,7 +106,7 @@ namespace Obli1Prog2
                     Usuario = "javialv",
                     Contrasenia = "j4vi@778",
                     DiasAtencion = new string[] { "lunes", "jueves" },
-                    HorariosDisponibles = GenerarHorarios(new string[] {"lunes", "jueves"}, TimeSpan.FromHours(10), TimeSpan.FromHours(17).Add(TimeSpan.FromMinutes(30)))
+                    HorariosDisponibles = new float[] { 10.00f, 10.30f, 11.00f, 11.30f, 12.00f, 12.30f, 13.00f, 13.30f, 14.00f, 14.30f, 15.00f, 15.30f, 16.00f, 16.30f, 17.00f, 17.30f }
                 }
             };
         }

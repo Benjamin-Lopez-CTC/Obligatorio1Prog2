@@ -15,7 +15,7 @@ namespace Obli1Prog2
         public int IdTurno { get; private set; }
         public DateOnly FechaPago { get; set; }
         public double Monto { get; set; }
-        public string? MetodoPago { get; set; }
+        public string MetodoPago { get; set; }
         #endregion
 
         #region Constructores

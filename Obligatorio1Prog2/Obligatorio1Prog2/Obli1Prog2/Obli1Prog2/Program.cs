@@ -152,11 +152,10 @@ void GestionTurnos()
         Console.Clear();
         Console.WriteLine("===== Gestión de turnos =====");
         Console.WriteLine("1. Ver disponibilidad");
-        Console.WriteLine("2. Ver consultas");
-        Console.WriteLine("3. Agendar consulta médica");
-        Console.WriteLine("4. Cancelar consulta");
-        Console.WriteLine("5. Reprogramar consulta");
-        Console.WriteLine("6. Historial de consultas");
+        Console.WriteLine("2. Agendar consulta médica");
+        Console.WriteLine("3. Cancelar consulta");
+        Console.WriteLine("4. Reprogramar consulta");
+        Console.WriteLine("5. Historial de consultas");
         Console.WriteLine("0. Volver");
         Console.WriteLine("");
 
@@ -165,22 +164,19 @@ void GestionTurnos()
         switch (opcion)
         {
             case "1":
-                VerDisponibilidad();
+                //VerDisponibilidad();
                 break;
             case "2":
-                VerConsultas();
+                //AgendarConsulta();
                 break;
             case "3":
-                AgendarConsulta();
+                //CancelarConsulta();
                 break;
             case "4":
-                CancelarConsulta();
-                break;
-            case "5":
                 //ReprogramarConsulta();
                 break;
-            case "6":
-                HistorialConsultas();
+            case "5":
+                //HistorialConsultas();
                 break;
             case "0":
                 volver = true;
@@ -321,7 +317,7 @@ void CambiarCont()
         Console.WriteLine("===== Cambiar contraseña =====");
 
         Console.WriteLine("Nombre de usuario:");
-        usuario = Console.ReadLine()?.Trim()!;
+        usuario = Console.ReadLine()?.Trim();
 
         if (!contrReps.ContainsKey(usuario))
         {
@@ -419,8 +415,6 @@ void DisponibilidadMed()
         var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
         Console.Write($"Medico: {medico.Nombre} {medico.Apellido}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
     }
-    Console.WriteLine("Presione una tecla para continuar...");
-    Console.ReadKey();
 }
 
 void DisponibilidadEsp() 
@@ -434,25 +428,6 @@ void DisponibilidadEsp()
         var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
         Console.WriteLine($"Especialidad: {medico.Especialidad}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
     }
-    Console.WriteLine("Presione una tecla para continuar...");
-    Console.ReadKey();
-}
-
-void VerConsultas()
-{
-    Console.Clear();
-    Console.WriteLine("===== Consultas agendadas =====");
-    if (listaTurnos.Count == 0)
-    {
-        Console.WriteLine("No hay consultas agendadas actualmente. Presione una tecla para continuar...");
-        Console.ReadKey();
-    }
-    else
-    {
-        listaTurnos.ForEach(turno => Console.WriteLine(turno));
-        Console.WriteLine("Presione una tecla para continuar...");
-        Console.ReadKey();
-    }
 }
 
 void AgendarConsulta()
@@ -460,14 +435,12 @@ void AgendarConsulta()
     int idPaciente;
     int idMedico;
     DateOnly fechaConsulta;
-    string horaString;
-    Hora horaConsulta;
-    List<Hora> horaDia;
+    float horaConsulta;
 
-    var idioma = new System.Globalization.CultureInfo("es-ES");
+    var cultura = new System.Globalization.CultureInfo("es-ES");
     DateOnly diaHoy = DateOnly.FromDateTime(DateTime.Today);
-    string nombreDia;
 
+    
 
     // Limpia la pantalla y muestra el cabezal de la seccion
     Console.Clear();
@@ -493,134 +466,30 @@ void AgendarConsulta()
 
     // Guarda la lista de los horarios del medico ingresado en una lista para despues confirmar si esta disponible esa hora
     Medicos medicoAConsultar = listaMedicos.FirstOrDefault(medico => medico.IdMedico == idMedico)!;
-    var horariosConsulta = medicoAConsultar.HorariosDisponibles;
+    float[] horariosConsulta = medicoAConsultar.HorariosDisponibles;
 
     // Primero valida si la fecha ingresada es posterior a la fecha de mañana, y despues valida si la hora ingresada coincide con las horas disponibles del medico ingresado
     do
     {
         do
         {
-            do
-            {
-                fechaConsulta = LeerFecha("Fecha de la consulta");
-                var diaSemana = fechaConsulta.DayOfWeek;
-                nombreDia = idioma.DateTimeFormat.GetDayName(diaSemana);
+            fechaConsulta = LeerFecha("Fecha de la consulta");
+            if (fechaConsulta <= diaHoy.AddDays(1))
+                Console.WriteLine("La fecha elegida no puede ser anterior a mañana, intente nuevamente...");
+        } while (fechaConsulta <= diaHoy);
 
-                if (fechaConsulta <= diaHoy)
-                {
-                    Console.WriteLine("La consulta solo puede ser agendada con 24 horas de anticipacion como minimo, intente nuevamente.");
-                }
-            } while (fechaConsulta <= diaHoy);
-            
-            if (!horariosConsulta!.Exists(hora => hora.DiaConsulta == nombreDia))
-            {
-                Console.WriteLine("El dia ingresado no coincide con los dias de atencion del medico, intente nuevamente.");
-            }
-        } while (!horariosConsulta.Exists(hora => hora.DiaConsulta == nombreDia));
-
-        horaDia = horariosConsulta.FindAll(hora => hora.DiaConsulta == nombreDia);
-        // List<Hora> listaHoras = {objeto1 (hora, dia, id), objeto2}
-
-        horaString = LeerHora();
-        if (!horaDia.Any(hora => hora.HoraConsulta == horaString))
+        horaConsulta = LeerFlotante("Hora de la consulta");
+        if (!horariosConsulta.Any(hora => hora == horaConsulta))
             Console.WriteLine("Esa hora no la ofrece el medico o no está disponible, intente nuevamente");
-
-        horaConsulta = horaDia.Find(hora => hora.HoraConsulta == horaString)!;
-        if (horaConsulta.IdPaciente != 0)
-            Console.WriteLine("Esa hora ya está agendada, intente nuevamente.");
-    } while (!horaDia.Any(hora => hora.HoraConsulta == horaString) || horaConsulta.IdPaciente != 0);
-
-    horaConsulta.IdPaciente = idPaciente;
+    } while (!horariosConsulta.Any(hora => hora == horaConsulta));
 
     // Por ultimo, guarda todos los datos en un objeto Turno y le asigna el estado como 1 (Agendado)
-    listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaString, 1));
+    listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaConsulta, 1));
 
     Console.Write("Consulta agendada exitosamente. Presione una tecla para continuar...");
     Console.ReadKey();
 }
 
-void CancelarConsulta()
-{
-    int idConsulta;
-    do
-    {
-        Console.Clear();
-        Console.WriteLine("===== Cancelar consulta =====");
-        //Si la lista de consultas esta vacia lo dice
-        if (listaTurnos.Count == 0)
-        {
-            Console.WriteLine("No hay consultas agendadas en este momento. Presione una tecla para volver...");
-            Console.ReadKey();
-            return;
-        }
-        //Pide el id de la cosulta a cancelar hasta que el usuario ingrese una que existe
-        idConsulta = LeerEntero("Ingrese el ID de la consulta a cancelar");
-        if (!listaTurnos.Any(consulta => consulta.IdTurno == idConsulta))
-        {
-            Console.WriteLine("No existe una consulta con ese ID. Presione una tecla para intentarlo nuevamente...");
-            Console.ReadKey();
-        }
-    }
-    while (!listaTurnos.Any(consulta => consulta.IdTurno == idConsulta));
-
-    //Encuentra y guarda la consulta que tenga el mismo ID que el que ingreso el usuario
-    Turnos consultaElegida = listaTurnos.Find(consulta => consulta.IdTurno == idConsulta);
-
-    //Verifica que la consulta no este ya cancelada o realizada
-    if (consultaElegida.EstadoTurno != 1)
-    {
-        Console.WriteLine("La consulta ingresada ya fue realizada o cancelada. Presione una tecla para intentarlo nuevamente...");
-        Console.ReadKey();
-        return;
-    }
-
-    //Muestra al usuario los datos de la consulta elegida y pide la verificacion para cancelarla
-    //Se repite hasta que el usuario eliga la opcion "Si" o "No"
-    string confirmacion;
-    do
-    {
-        Console.WriteLine("Esta seguro que quiere cancelar esta consulta?");
-        Console.WriteLine(consultaElegida);
-        confirmacion = LeerTexto("(Si / No)");
-        if (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no")
-        {
-            Console.WriteLine("Opcion invalida. Presione una telca para volver a intentar...");
-            Console.ReadKey();
-            Console.Clear();
-        }
-    }
-    while (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no");
-
-    //Si elige la opcion "Si" el estado de la consulta cambia a cancelada
-    if (confirmacion.ToLower() == "si")
-    {
-        consultaElegida.EstadoTurno = 3;
-        Console.WriteLine("Consulta cancelada correctamente. Presione una tecla para volver...");
-        Console.ReadKey();
-    }
-    //Si elige la opcion "No" la consulta no es cancelada
-    else
-    {
-        Console.WriteLine("Cancelacion anulada. Presione una tecla para volver...");
-        Console.ReadKey();
-    }
-
-}
-
-void HistorialConsultas()
-{
-    Console.Clear();
-    Console.WriteLine("===== Historial de consultas =====");
-    //Encuentra todos los turnos que esten realizados y los guarda en la listaTurnos
-    listaTurnos = listaTurnos.FindAll(turno => turno.EstadoTurno == 2);
-    //Guarda en la listaTurno los turnos ordenados por fecha descendiente
-    listaTurnos = listaTurnos.OrderByDescending(turno => turno.FechaTurno).ToList();
-    //Muestra todos los turnos
-    listaTurnos.ForEach(turno => Console.WriteLine(turno));
-    
-    Console.Write("Presione cualquier tecla para volver...");
-    Console.ReadKey();
-}
 #endregion
 
 #region Metodos menú 4
@@ -661,7 +530,7 @@ void ConsultasFrecuentes()
     Console.WriteLine("=== Consultas mas frecuentes por especialidad ===");
 
     //Diccionario para guardar la especialidad como clave y la cantidad de consultas como valor
-    Dictionary<string, int> dEspecialidad = new();
+    Dictionary<string, int> dEspecialidad = new Dictionary<string, int>();
     dEspecialidad.Add("Cardiología", 0);
     dEspecialidad.Add("Pediatría", 0);
     dEspecialidad.Add("Dermatología", 0);
@@ -671,8 +540,8 @@ void ConsultasFrecuentes()
     foreach (var turno in listaTurnos)
     {
         int idMedicoTurno = turno.IdMedicos;
-        Medicos medicoEncontrado = listaMedicos.Find(m => m.IdMedico == idMedicoTurno)!;
-        string especialidad = medicoEncontrado.Especialidad!;
+        Medicos medicoEncontrado = listaMedicos.Find(m => m.IdMedico == idMedicoTurno);
+        string especialidad = medicoEncontrado.Especialidad;
 
         dEspecialidad[especialidad]++;
     }
@@ -702,7 +571,7 @@ void RankingConsultados()
     foreach (var turno in listaTurnos)
     {
         int idMedicoTurno = turno.IdMedicos;
-        Medicos medicoEncontrado = listaMedicos.Find(m => m.IdMedico == idMedicoTurno)!;
+        Medicos medicoEncontrado = listaMedicos.Find(m => m.IdMedico == idMedicoTurno);
         medicoEncontrado.CantConsultas++;
     }
     //Ordena la lista de medicos en orden descendiente y muestra el nombre, apellido y cantidad de consultas de cada medico
@@ -746,6 +615,24 @@ int LeerEntero(string campo)
         else if (string.IsNullOrWhiteSpace(entrada))
             Console.WriteLine($"El campo '{campo}' no puede estar vacío.");
     } while (!int.TryParse(entrada, out valor) || valor <= 0 || string.IsNullOrWhiteSpace(entrada));
+    return valor;
+}
+
+float LeerFlotante(string campo)
+{
+    float valor;
+    string? entrada;
+    do
+    {
+        Console.Write($"{campo}: ");
+        entrada = Console.ReadLine()?.Trim();
+        if (!float.TryParse(entrada, out valor))
+            Console.WriteLine("El valor ingresado no es un numero o no es un valor válido, intente nuevamente.");
+        else if (valor <= 0)
+            Console.WriteLine("El valor ingresado no puede ser menor a 0, intente nuevamente.");
+        else if (string.IsNullOrWhiteSpace(entrada))
+            Console.WriteLine($"El campo '{campo}' no puede estar vacío");
+    } while (!float.TryParse(entrada, out valor) || valor <= 0 || string.IsNullOrWhiteSpace(entrada));
     return valor;
 }
 
@@ -803,23 +690,6 @@ DateOnly LeerFecha(string campo)
     // Se necesita guardar en una variable tipo var el formato de calendario necesitado
     var calendarioGregoriano = new System.Globalization.GregorianCalendar();
     return new DateOnly(anio, mes, dia, calendarioGregoriano);
-}
-
-// Metodo para ingresar un string con formato de hora
-string LeerHora()
-{
-    string? valor;
-    do
-    {
-        Console.Write("Ingrese una hora con el siguiente formato => '12:30': ");
-        valor = Console.ReadLine()?.Trim()!;
-
-        if (!valor.Contains(':'))
-            Console.WriteLine("Hora incorrectamente ingresada, intente nuevamente.");
-        else if (!valor.EndsWith('0'))
-            Console.WriteLine("Ingrese la hora en incrementos de 30 minutos, intente nuevamente.");
-    } while (!valor.Contains(':') && !valor.EndsWith('0'));
-    return valor;
 }
 
 // Metodo para ingresar un email
@@ -893,7 +763,7 @@ Dictionary<string, string> GuardarContrReps()
     Dictionary<string, string> contrReps = new Dictionary<string, string>();
     foreach (Recepcionistas rep in listaRecepcionistas)
     {
-        contrReps.Add(rep.Usuario!, rep.Contrasenia!);
+        contrReps.Add(rep.Usuario, rep.Contrasenia);
     }
     return contrReps;
 }

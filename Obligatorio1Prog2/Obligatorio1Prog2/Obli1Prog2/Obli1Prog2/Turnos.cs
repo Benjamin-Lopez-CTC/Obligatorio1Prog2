@@ -15,12 +15,12 @@ namespace Obli1Prog2
         public int IdPaciente { get; private set; }
         public int IdMedicos { get; private set; }
         public DateOnly FechaTurno { get; set; } 
-        public string? HoraTurno { get; set; } 
+        public float HoraTurno { get; set; } 
         public int EstadoTurno { get; set; }
         #endregion
 
         #region Constructores
-        public Turnos(int idPaciente, int idMedico, DateOnly fechaTurno, string horaTurno, int estadoTurno)
+        public Turnos(int idPaciente, int idMedico, DateOnly fechaTurno, float horaTurno, int estadoTurno)
         {
             IdTurno = contadorID++;
             IdPaciente = idPaciente;
@@ -40,7 +40,7 @@ namespace Obli1Prog2
         public override string ToString()
         {
             var estado = EstadoTurno == 1 ? "Agendada" : EstadoTurno == 2 ? "Realizada" : EstadoTurno == 3 ? "Cancelada" : "Invalido"; 
-            return $"ID Turno: {IdTurno}, ID Paciente: {IdPaciente}, ID Medico: {IdMedicos}, Fecha: {FechaTurno}, Hora: {HoraTurno}, Estado: {estado}";
+            return $"Turno: ID Turno: {IdTurno}, ID Paciente: {IdPaciente}, ID Medico: {IdMedicos}, Fecha: {FechaTurno}, Hora: {HoraTurno}, Estado: {estado}";
         }
 
         public static List<Turnos> CargarTurnos()
@@ -52,7 +52,7 @@ namespace Obli1Prog2
                     IdPaciente = 1,
                     IdMedicos = 2,
                     FechaTurno = new DateOnly(2025, 11, 20),
-                    HoraTurno = "9:30",
+                    HoraTurno = 09.30f,
                     EstadoTurno = 1
                 },
                 new Turnos
@@ -60,15 +60,15 @@ namespace Obli1Prog2
                     IdPaciente = 2,
                     IdMedicos = 1,
                     FechaTurno = new DateOnly(2025, 10, 24),
-                    HoraTurno = "10:00",
-                    EstadoTurno = 2
+                    HoraTurno = 10.00f,
+                    EstadoTurno = 1
                 },
                 new Turnos
                 {
                     IdPaciente = 3,
                     IdMedicos = 3,
                     FechaTurno = new DateOnly(2025, 12, 01),
-                    HoraTurno = "14:30",
+                    HoraTurno = 14.30f,
                     EstadoTurno = 2
                 },
                 new Turnos
@@ -76,7 +76,7 @@ namespace Obli1Prog2
                     IdPaciente = 4,
                     IdMedicos = 4,
                     FechaTurno = new DateOnly(2026, 5, 15),
-                    HoraTurno = "8:00",
+                    HoraTurno = 08.00f,
                     EstadoTurno = 3
                 },
                 new Turnos
@@ -84,7 +84,7 @@ namespace Obli1Prog2
                     IdPaciente = 1,
                     IdMedicos = 2,
                     FechaTurno = new DateOnly(2025, 10, 23),
-                    HoraTurno = "16:00",
+                    HoraTurno = 16.00f,
                     EstadoTurno = 1
                 }
             };
