@@ -52,7 +52,7 @@ do
 
         default:
             Console.WriteLine("Opción invalida. Presione una tecla para continuar...");
-            Console.ReadKey().KeyChar.ToString();
+            Console.ReadKey();
             break;
     }
 }
@@ -154,10 +154,11 @@ void GestionTurnos()
         Console.Clear();
         Console.WriteLine("===== Gestión de turnos =====");
         Console.WriteLine("1. Ver disponibilidad");
-        Console.WriteLine("2. Agendar consulta médica");
-        Console.WriteLine("3. Cancelar consulta");
-        Console.WriteLine("4. Reprogramar consulta");
-        Console.WriteLine("5. Historial de consultas");
+        Console.WriteLine("2. Ver consultas");
+        Console.WriteLine("3. Agendar consulta médica");
+        Console.WriteLine("4. Cancelar consulta");
+        Console.WriteLine("5. Reprogramar consulta");
+        Console.WriteLine("6. Historial de consultas");
         Console.WriteLine("0. Volver");
         Console.WriteLine("");
 
@@ -169,16 +170,19 @@ void GestionTurnos()
                 VerDisponibilidad();
                 break;
             case "2":
-                AgendarConsulta();
+                VerConsultas();
                 break;
             case "3":
-                //CancelarConsulta();
+                AgendarConsulta();
                 break;
             case "4":
-                //ReprogramarConsulta();
+                CancelarConsulta();
                 break;
             case "5":
-                //HistorialConsultas();
+                //ReprogramarConsulta();
+                break;
+            case "6":
+                HistorialConsultas();
                 break;
             case "0":
                 volver = true;
@@ -189,7 +193,6 @@ void GestionTurnos()
                 break;
         }
     } while (!volver);
-
 }
 
 // Menu 3: Gestion de pagos
@@ -300,8 +303,8 @@ void RegistrarPaciente()
     // Guarda todos los datos en un nuevo paciente y lo añade a la lista de paciente
     listaPacientes.Add(new Pacientes(nombre, apellido, numDocumento, fechaNacimiento, telefono, email, obraSocial, nombreUsuario, contrasenia));
 
-    Console.Write("Paciente agregado exitosamente. Presione una tecla para continuar...");
-    Console.ReadKey();
+    Console.Write("Paciente agregado exitosamente.");
+    Pausar();
 }
 
 //Metodo para cambiar la contraseña del usuario recepcionista.
@@ -399,7 +402,7 @@ void VerDisponibilidad()
                 break;
             default:
                 Console.WriteLine("Valor no válido. Presione una tecla para continuar...");
-                Console.ReadKey().KeyChar.ToString();
+                Console.ReadKey();
                 break;
         }
     } while (!volver);
@@ -417,8 +420,7 @@ void DisponibilidadMed()
         var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
         Console.Write($"Medico: {medico.Nombre} {medico.Apellido}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
     }
-    Console.WriteLine("Presione una tecla para continuar...");
-    Console.ReadKey();
+    Pausar();
 }
 
 void DisponibilidadEsp() 
@@ -432,8 +434,23 @@ void DisponibilidadEsp()
         var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
         Console.WriteLine($"Especialidad: {medico.Especialidad}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
     }
-    Console.WriteLine("Presione una tecla para continuar...");
-    Console.ReadKey();
+    Pausar();
+}
+
+void VerConsultas()
+{
+    Console.Clear();
+    Console.WriteLine("===== Consultas agendadas =====");
+    if (listaTurnos.Count == 0)
+    {
+        Console.WriteLine("No hay consultas agendadas actualmente.");
+        Pausar();
+    }
+    else
+    {
+        listaTurnos.ForEach(turno => Console.WriteLine(turno));
+        Pausar();
+    }
 }
 
 void AgendarConsulta()
@@ -448,7 +465,6 @@ void AgendarConsulta()
     var idioma = new System.Globalization.CultureInfo("es-ES");
     DateOnly diaHoy = DateOnly.FromDateTime(DateTime.Today);
     string nombreDia;
-
 
     // Limpia la pantalla y muestra el cabezal de la seccion
     Console.Clear();
@@ -516,10 +532,91 @@ void AgendarConsulta()
     // Por ultimo, guarda todos los datos en un objeto Turno y le asigna el estado como 1 (Agendado)
     listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaString, 1));
 
-    Console.Write("Consulta agendada exitosamente. Presione una tecla para continuar...");
-    Console.ReadKey();
+    Console.Write("Consulta agendada exitosamente.");
+    Pausar();
 }
 
+void CancelarConsulta()
+{
+    int idConsulta;
+    do
+    {
+        Console.Clear();
+        Console.WriteLine("===== Cancelar consulta =====");
+        //Si la lista de consultas esta vacia lo dice
+        if (listaTurnos.Count == 0)
+        {
+            Console.WriteLine("No hay consultas agendadas en este momento.");
+            Volver();
+            return;
+        }
+        //Pide el id de la cosulta a cancelar hasta que el usuario ingrese una que existe
+        idConsulta = LeerEntero("Ingrese el ID de la consulta a cancelar");
+        if (!listaTurnos.Any(consulta => consulta.IdTurno == idConsulta))
+        {
+            Console.WriteLine("No existe una consulta con ese ID. Presione una tecla para intentarlo nuevamente...");
+            Console.ReadKey();
+        }
+    }
+    while (!listaTurnos.Any(consulta => consulta.IdTurno == idConsulta));
+
+    //Encuentra y guarda la consulta que tenga el mismo ID que el que ingreso el usuario
+    Turnos consultaElegida = listaTurnos.Find(consulta => consulta.IdTurno == idConsulta)!;
+
+    //Verifica que la consulta no este ya cancelada o realizada
+    if (consultaElegida.EstadoTurno != 1)
+    {
+        Console.WriteLine("La consulta ingresada ya fue realizada o cancelada. Presione una tecla para intentarlo nuevamente...");
+        Console.ReadKey();
+        return;
+    }
+
+    //Muestra al usuario los datos de la consulta elegida y pide la verificacion para cancelarla
+    //Se repite hasta que el usuario eliga la opcion "Si" o "No"
+    string confirmacion;
+    do
+    {
+        Console.WriteLine("Esta seguro que quiere cancelar esta consulta?");
+        Console.WriteLine(consultaElegida);
+        confirmacion = LeerTexto("(Si / No)");
+        if (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no")
+        {
+            Console.WriteLine("Opcion invalida. Presione una telca para volver a intentar...");
+            Console.ReadKey();
+            Console.Clear();
+        }
+    }
+    while (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no");
+
+    //Si elige la opcion "Si" el estado de la consulta cambia a cancelada
+    if (confirmacion.ToLower() == "si")
+    {
+        consultaElegida.EstadoTurno = 3;
+        Console.WriteLine("Consulta cancelada correctamente.");
+        Volver();
+    }
+    //Si elige la opcion "No" la consulta no es cancelada
+    else
+    {
+        Console.WriteLine("Cancelacion anulada.");
+        Volver();
+    }
+
+}
+
+void HistorialConsultas()
+{
+    Console.Clear();
+    Console.WriteLine("===== Historial de consultas =====");
+    //Encuentra todos los turnos que esten realizados y los guarda en la listaTurnos
+    listaTurnos = listaTurnos.FindAll(turno => turno.EstadoTurno == 2);
+    //Guarda en la listaTurno los turnos ordenados por fecha descendiente
+    listaTurnos = listaTurnos.OrderByDescending(turno => turno.FechaTurno).ToList();
+    //Muestra todos los turnos
+    listaTurnos.ForEach(turno => Console.WriteLine(turno));
+
+    Volver();
+}
 #endregion
 
 #region Metodos menú 4
@@ -537,8 +634,8 @@ void ListadoPacientes()
         listaPacientes = listaPacientes.OrderBy(paciente => paciente.Nombre).ToList();
         listaPacientes.ForEach(paciente => Console.WriteLine(paciente + $"\n"));
     }
-    Console.Write("Presione cualquier tecla para volver...");
-    Console.ReadKey();
+
+    Volver();
 }
 
 // Metodo para listar todos los medicos ordenados por especialidad
@@ -549,8 +646,7 @@ void ListadoMedicos()
     listaMedicos = listaMedicos.OrderBy(medico => medico.Especialidad).ToList();
     listaMedicos.ForEach(medico => Console.WriteLine(medico + $"\n"));
 
-    Console.Write("Presione cualquier tecla para volver...");
-    Console.ReadKey();
+    Volver();
 }
 
 //Metodo para mostrar las consulas mas frecuentes por especialidad
@@ -587,8 +683,7 @@ void ConsultasFrecuentes()
         Console.WriteLine($"{par.Key}: {par.Value} {cadena}");
     }
 
-    Console.Write("Presione cualquier tecla para volver...");
-    Console.ReadKey();
+    Volver();
 }
 
 //Metodo para listar los medicos ordenados por cantidad de consultas
@@ -608,8 +703,7 @@ void RankingConsultados()
     listaMedicos = listaMedicos.OrderByDescending(medico => medico.CantConsultas).ToList();
     listaMedicos.ForEach(medico => Console.WriteLine($"Medico: {medico.Nombre} {medico.Apellido} | Cantidad de consultas: {medico.CantConsultas}"));
 
-    Console.Write("Presione cualquier tecla para volver...");
-    Console.ReadKey();
+    Volver();
 }
 #endregion
 
@@ -834,5 +928,19 @@ void ActualizarDatos()
             }
         }
     }
+}
+
+// Metodo para pausar el proceso, solo continua una vez la persona presiona cualquier tecla
+static void Pausar()
+{
+    Console.WriteLine("Presione una tecla para continuar...");
+    Console.ReadKey();
+}
+
+// Metodo similar a pausar, pero con la palabra volver en vez de continuar
+static void Volver()
+{
+    Console.WriteLine("Presione una tecla para volver...");
+    Console.ReadKey();
 }
 #endregion
