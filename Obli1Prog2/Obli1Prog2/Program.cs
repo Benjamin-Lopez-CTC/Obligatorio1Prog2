@@ -1,4 +1,4 @@
-﻿// Program.cs
+﻿// Programa codificado por Benjamín López y Felipe Alvarez
 using Obli1Prog2;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,9 +13,9 @@ List<Pagos> listaPagos = Pagos.CargarPagos();
 Dictionary<string, string> contrReps = GuardarContrReps();
 
 ActualizarDatos();
-
-Login();
-
+/*
+Login(); // Desactivado para agilizar pruebas
+*/
 do
 {
     MostrarMenuPrincipal();
@@ -179,7 +179,7 @@ void GestionTurnos()
                 CancelarConsulta();
                 break;
             case "5":
-                //ReprogramarConsulta();
+                ReprogramarConsulta();
                 break;
             case "6":
                 HistorialConsultas();
@@ -374,7 +374,7 @@ void CambiarCont()
 #endregion
 
 #region Metodos menú 2
-//Metodo para elegir ver disponibilidad por medico o especialidad
+//Metodo para elegir ver disponibilidad por medico o especialidad 
 void VerDisponibilidad() 
 {
     bool volver = false;
@@ -392,10 +392,10 @@ void VerDisponibilidad()
         switch (opcion)
         {
             case "1":
-                DisponibilidadMed();
+                NuevoDispMed();
                 break;
             case "2":
-                DisponibilidadEsp();
+                NuevoDispEsp();
                 break;
             case "0":
                 volver = true;
@@ -408,39 +408,82 @@ void VerDisponibilidad()
     } while (!volver);
 }
 
-//Metodo para cer disponibilidad por medico
-void DisponibilidadMed() 
+// Metodo para cer disponibilidad por medico
+void NuevoDispMed()
 {
     Console.Clear();
-    Console.WriteLine("===== Disponibilidad por médico =====");
+    int idMedico;
 
-    foreach (Medicos medico in listaMedicos) 
+    // Utiliza un bucle para recibir un id de medico valido
+    do
     {
-        var dias = medico.DiasAtencion != null ? string.Join(", ", medico.DiasAtencion) : "Sin disponibilidad";
-        var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
-        Console.Write($"Medico: {medico.Nombre} {medico.Apellido}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
+        Console.WriteLine("=== Disponibilidad por médico ===");
+        idMedico = LeerEntero("Ingrese el Id del médico a mostrar");
+        if (!listaMedicos.Exists(medico => medico.IdMedico == idMedico))
+        {
+            Console.WriteLine("No existe el médico ingresado");
+            Pausar();
+            Console.Clear();
+        }
+    } while (!listaMedicos.Exists(medico => medico.IdMedico == idMedico));
+
+    // Obtiene el medico con el mismo id que el ingresado, guarda las horas disponibles del medico en una lista y extrae los dias de atencion del medico
+    Medicos medico = listaMedicos.Find(medico => medico.IdMedico == idMedico)!;
+    List<Hora> horasDisponibles = medico.HorariosDisponibles!.FindAll(hora => hora.IdPaciente == 0);
+    string[] diasMedico = medico.DiasAtencion!;
+
+    Console.WriteLine($"\nMedico/a: {medico.Nombre} {medico.Apellido}\n");
+    // Por cada dia de atencion...
+    foreach (string dia in diasMedico)
+    {
+        // Guarda en una lista las horas de ese dia, obtiene el texto que dice la hora en si y une todas las horas para mostrarlas con un formato legible
+        List<Hora> horaPorDia = horasDisponibles.FindAll(hora => hora.DiaConsulta == dia);
+        List<string> horaString = horaPorDia.Select(hora => hora.HoraConsulta).ToList();
+        Console.WriteLine($"{dia}: \n {string.Join(", ", horaString)}\n");
     }
+
     Pausar();
 }
 
-void DisponibilidadEsp() 
+//Metodo para mostrar cada especialidad con la cantidad de medicos disponibles de cada una
+void NuevoDispEsp()
 {
     Console.Clear();
-    Console.WriteLine("===== Disponibilidad por especialidad =====");
+    Console.WriteLine("=== Disponibilidad por especialidad ===");
 
-    foreach (Medicos medico in listaMedicos)
-    {
-        var dias = medico.DiasAtencion != null ? string.Join(", ", medico.DiasAtencion) : "Sin disponibilidad";
-        var horas = medico.HorariosDisponibles != null ? string.Join(", ", medico.HorariosDisponibles) : " Sin disponibilidad";
-        Console.WriteLine($"Especialidad: {medico.Especialidad}, Dias disponibles: {dias}, Horarios disponnibles: {horas}");
+    //Diccionario para guardar la especialidad como clave y la cantidad de medicos como valor
+    Dictionary<string, int> dEspecialidad = new();
+    dEspecialidad.Add("Cardiología", 0);
+    dEspecialidad.Add("Pediatría", 0);
+    dEspecialidad.Add("Dermatología", 0);
+    dEspecialidad.Add("Neurología", 0);
+
+    //foreach para encontrar la especialidad de cada medico en la lista precargada y aumentar en 1 el valor del diccionario con la misma clave
+    foreach (var medico in listaMedicos)
+    {   
+        string especialidad = medico.Especialidad!;
+        dEspecialidad[especialidad]++;
     }
-    Pausar();
+
+    //foreach para mostrar la especialidad y su cantidad de médicos
+    foreach (var par in dEspecialidad)
+    {
+        string cadena = "Médicos";
+        if (par.Value == 1)
+        {
+            cadena = "Médico";
+        }
+        Console.WriteLine($"{par.Key}: {par.Value} {cadena}");
+    }
+
+    Volver();
 }
 
+//Metodo para ver todas las consultas si las hay
 void VerConsultas()
 {
     Console.Clear();
-    Console.WriteLine("===== Consultas agendadas =====");
+    Console.WriteLine("=== Consultas agendadas ===");
     if (listaTurnos.Count == 0)
     {
         Console.WriteLine("No hay consultas agendadas actualmente.");
@@ -448,19 +491,24 @@ void VerConsultas()
     }
     else
     {
-        listaTurnos.ForEach(turno => Console.WriteLine(turno));
+        foreach (Turnos turno in listaTurnos)
+        {
+            Console.WriteLine(turno);
+        }
         Pausar();
     }
 }
 
+// Metodo que captura los datos necesarios para agendar una nueva consulta
 void AgendarConsulta()
 {
-    int idPaciente;
-    int idMedico;
-    DateOnly fechaConsulta;
-    string horaString;
+    int idPaciente = 0;
+    int idMedico = 0;
+    DateOnly fechaConsulta = new DateOnly(2026, 12, 20);
+    string horaString = "";
     Hora horaConsulta;
-    List<Hora> horaDia;
+    List<Hora> horaDia = [];
+    List<Turnos> turnosMedico = [];
 
     var idioma = new System.Globalization.CultureInfo("es-ES");
     DateOnly diaHoy = DateOnly.FromDateTime(DateTime.Today);
@@ -470,72 +518,122 @@ void AgendarConsulta()
     Console.Clear();
     Console.WriteLine("===== Agendar nueva consulta médica =====");
 
+    bool continuar = true;
+    int paso = 0;
+
     // Captura todos los datos para la consulta
-
-    // Valida si el ID del paciente ingresado existe
-    do
+    while (continuar)
     {
-        idPaciente = LeerEntero("Id del paciente");
-        if (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente))
-            Console.WriteLine("No existe el paciente, intente nuevamente...");
-    } while (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente));
-
-    // Valida si el ID del medico ingresado existe
-    do
-    {
-        idMedico = LeerEntero("Id del médico");
-        if (!listaMedicos.Any(medico => medico.IdMedico == idMedico))
-            Console.WriteLine("No existe el médico, intente nuevamente...");
-    } while (!listaMedicos.Any(medico => medico.IdMedico == idMedico));
-
-    // Guarda la lista de los horarios del medico ingresado en una lista para despues confirmar si esta disponible esa hora
-    Medicos medicoAConsultar = listaMedicos.FirstOrDefault(medico => medico.IdMedico == idMedico)!;
-    var horariosConsulta = medicoAConsultar.HorariosDisponibles;
-
-    // Primero valida si la fecha ingresada es posterior a la fecha de mañana, y despues valida si la hora ingresada coincide con las horas disponibles del medico ingresado
-    do
-    {
-        do
+        switch (paso)
         {
-            do
-            {
+            case 0:
+                // Valida si el ID del paciente ingresado existe
+                idPaciente = LeerEntero("Id del paciente");
+                if (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente))
+                {
+                    Console.WriteLine("No existe el paciente, intente nuevamente...");
+                    paso = 0;
+                    continue;
+                }
+
+                paso = 1;
+                break;
+
+            case 1:
+                // Valida si el ID del medico ingresado existe
+                idMedico = LeerEntero("Id del médico");
+                if (!listaMedicos.Any(medico => medico.IdMedico == idMedico))
+                {
+                    Console.WriteLine("No existe el médico, intente nuevamente...");
+                    paso = 0;
+                    continue;
+                }
+
+                paso = 2;
+                break;
+
+            // Primero valida si la fecha ingresada es posterior a la fecha de mañana, y despues valida si la hora ingresada coincide con las horas disponibles del medico ingresado
+            case 2:
+                Medicos medicoAConsultar = listaMedicos.FirstOrDefault(medico => medico.IdMedico == idMedico)!;
+                var horariosConsulta = medicoAConsultar.HorariosDisponibles;
+
                 fechaConsulta = LeerFecha("Fecha de la consulta");
                 var diaSemana = fechaConsulta.DayOfWeek;
                 nombreDia = idioma.DateTimeFormat.GetDayName(diaSemana);
 
-                if (fechaConsulta <= diaHoy)
+                turnosMedico.FindAll(turno => (turno.IdMedicos == idMedico) && (turno.FechaTurno == fechaConsulta));
+
+                // Si el medico ya tiene el maximo de 6 consultas en el mismo dia
+                if (turnosMedico.Count == 6)
+                {
+                    Console.WriteLine("El medico ingresado ya tiene el maximo de consultas agendadas en el mismo dia, intente con otra fecha.");
+                    paso = 2;
+                    continue;
+                }
+
+                // Si el paciente tiene una consulta con el mismo medico en el mismo dia
+                if (listaTurnos.Exists(turno => (turno.FechaTurno == fechaConsulta) && (turno.IdPaciente == idPaciente && turno.IdMedicos == idMedico))) 
+                {
+                    Console.WriteLine("Ese paciente ya tiene agendada una consulta con ese medico en ese dia, intente nuevamente.");
+                    paso = 2;
+                    continue;
+                }
+
+                // Si la fecha de consulta es dentro de las proximas 24 horas
+                if (fechaConsulta < diaHoy.AddDays(1))
                 {
                     Console.WriteLine("La consulta solo puede ser agendada con 24 horas de anticipacion como minimo, intente nuevamente.");
+                    paso = 2;
+                    continue;
                 }
-            } while (fechaConsulta <= diaHoy);
-            
-            if (!horariosConsulta!.Exists(hora => hora.DiaConsulta == nombreDia))
-            {
-                Console.WriteLine("El dia ingresado no coincide con los dias de atencion del medico, intente nuevamente.");
-            }
-        } while (!horariosConsulta.Exists(hora => hora.DiaConsulta == nombreDia));
 
-        horaDia = horariosConsulta.FindAll(hora => hora.DiaConsulta == nombreDia);
-        // List<Hora> listaHoras = {objeto1 (hora, dia, id), objeto2}
+                // Si la fecha ingresada no concuerda con los dias de atencion del medico
+                if (!horariosConsulta!.Exists(hora => hora.DiaConsulta == nombreDia))
+                {
+                    Console.WriteLine("El dia ingresado no coincide con los dias de atencion del medico, intente nuevamente.");
+                    paso = 2;
+                    continue;
+                }
 
-        horaString = LeerHora();
-        if (!horaDia.Any(hora => hora.HoraConsulta == horaString))
-            Console.WriteLine("Esa hora no la ofrece el medico o no está disponible, intente nuevamente");
+                horaDia = horariosConsulta.FindAll(hora => hora.DiaConsulta == nombreDia);
 
-        horaConsulta = horaDia.Find(hora => hora.HoraConsulta == horaString)!;
-        if (horaConsulta.IdPaciente != 0)
-            Console.WriteLine("Esa hora ya está agendada, intente nuevamente.");
-    } while (!horaDia.Any(hora => hora.HoraConsulta == horaString) || horaConsulta.IdPaciente != 0);
+                paso = 3;
+                break;
 
-    horaConsulta.IdPaciente = idPaciente;
+            case 3:
+                horaString = LeerHora();
+                // Si la hora ingresada no esta disponible
+                if (!horaDia.Any(hora => hora.HoraConsulta == horaString))
+                {
+                    Console.WriteLine("Esa hora no la ofrece el medico o no está disponible, intente nuevamente");
+                    paso = 2;
+                    continue;
+                }
 
-    // Por ultimo, guarda todos los datos en un objeto Turno y le asigna el estado como 1 (Agendado)
-    listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaString, 1));
+                // Si la hora ingresada ya esta agendada
+                horaConsulta = horaDia.Find(hora => hora.HoraConsulta == horaString)!;
+                if (horaConsulta.IdPaciente != 0)
+                {
+                    Console.WriteLine("Esa hora ya está agendada, intente nuevamente.");
+                    paso = 2;
+                    continue;
+                }
 
-    Console.Write("Consulta agendada exitosamente.");
-    Pausar();
+                // Asigna a la hora ingresada el id del paciente para que figure como ocupada
+                horaConsulta.IdPaciente = idPaciente;
+
+                // Por ultimo, guarda todos los datos en un objeto Turno y le asigna el estado como 1 (Agendado)
+                listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaString, 1));
+
+                Console.Write("Consulta agendada exitosamente.");
+                Volver();
+                continuar = false;
+                break;
+        }
+    }
 }
 
+// Metodo para cancelar una consulta con estado 1 (Agendada)
 void CancelarConsulta()
 {
     int idConsulta;
@@ -601,19 +699,132 @@ void CancelarConsulta()
         Console.WriteLine("Cancelacion anulada.");
         Volver();
     }
-
 }
 
+//Metodo para reprogramar una consulta ya agendada
+void ReprogramarConsulta()
+{
+    var idioma = new System.Globalization.CultureInfo("es-ES");
+
+    Console.Clear();
+    Console.WriteLine("===== Reprogramar consulta =====");
+    //Verifica que la lista de consultas no este vacia.
+    if (listaTurnos.Count == 0)
+    {
+        Console.Write("No hay consultas agendadas en este momento.");
+        Volver();
+        return;
+    }
+
+    //Pide el ID de la consulta que se quiere reprogramar y verifica que exista
+    int idConsulta = LeerEntero("Ingrese el ID de la consulta a reporogramar");
+    if (!listaTurnos.Exists(turno => turno.IdTurno == idConsulta))
+    {
+        Console.Write("No se encontro una consulta con ese ID.");
+        Volver();
+        return;
+    }
+
+    //Si existe guarda la consulta elegida
+    Turnos consultaElegida = listaTurnos.Find(turno => turno.IdTurno == idConsulta)!;
+
+    //Verifica que la consulta no esté ya realizada o cancelada
+    if (consultaElegida.EstadoTurno == 2 || consultaElegida.EstadoTurno == 3)
+    {
+        Console.WriteLine("La consulta elegida ya fue realizada o cancelada.");
+        Volver();
+        return;
+    }
+
+    //Pide ingresar la nueva fecha y hora de la consulta
+    DateOnly nuevaFecha = LeerFecha("Nueva fecha");
+    string nuevaHora = LeerHora();
+
+    var diaSemana = nuevaFecha.DayOfWeek;
+    string nombreDia = idioma.DateTimeFormat.GetDayName(diaSemana);
+
+    Medicos medico = listaMedicos.Find(medico => medico.IdMedico == consultaElegida.IdMedicos)!;
+    List<Hora> horarios = medico.HorariosDisponibles!;
+
+    //Verifica que el medico ofrezca esa hora
+    if (!horarios.Any(hora => (hora.HoraConsulta == nuevaHora) && (hora.DiaConsulta == nombreDia)))
+    {
+        Console.WriteLine("Esa hora no la ofrece el medico, intente nuevamente");
+        Volver();
+        return;
+    }
+
+    var horaConsulta = horarios.Find(hora => (hora.HoraConsulta == nuevaHora) && (hora.DiaConsulta == nombreDia))!;
+    if (horaConsulta.IdPaciente != 0)
+    {
+        Console.WriteLine("Esa hora ya está agendada, intente nuevamente.");
+        Volver();
+        return;
+    }
+
+    //Pide la confirmacion del usuario mostrando la nueva fecha y hora y la consulta elegida hasta que el usuario seleccione una de las opciones esperadas
+    string confirmacion;
+    do
+    {
+        Console.WriteLine("Esta seguro que quiere reprogramar esta consulta para el dia " + nuevaFecha + " a las " + nuevaHora +"hrs?");
+        Console.WriteLine(consultaElegida);
+        confirmacion = LeerTexto("(Si / No)");
+        if (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no")
+        {
+            Console.WriteLine("Opcion invalida. Presione una telca para volver a intentar...");
+            Console.ReadKey();
+            Console.Clear();
+        }
+    }
+    while (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no");
+
+    //Si el usuario elige reprogramar la consulta se le cambian los valores de fecha y hora a los ingresados
+    if (confirmacion.ToLower() == "si")
+    {
+        consultaElegida.FechaTurno = nuevaFecha;
+        consultaElegida.HoraTurno = nuevaHora;
+        Console.WriteLine("Consulta reprogramada correctamente.");
+        Volver();
+    }
+    //Si el usuario elige la opcion "No" la reprogramacion es cancelada
+    else
+    {
+        Console.WriteLine("Reprogramacion cancelada.");
+        Volver();
+    }
+}
+
+//Metodo para ver las consultas de un paciente espeficico
 void HistorialConsultas()
 {
     Console.Clear();
-    Console.WriteLine("===== Historial de consultas =====");
-    //Encuentra todos los turnos que esten realizados y los guarda en la listaTurnos
-    listaTurnos = listaTurnos.FindAll(turno => turno.EstadoTurno == 2);
-    //Guarda en la listaTurno los turnos ordenados por fecha descendiente
-    listaTurnos = listaTurnos.OrderByDescending(turno => turno.FechaTurno).ToList();
+    Console.WriteLine("===== Historial de consultas por paciente =====");
+
+    //Se pide el ID del paciente y verifica que exista
+    int idPaciente = LeerEntero("Ingrese el ID del paciente");
+
+    if (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente))
+    {
+        Console.WriteLine("No se encontro un paciente con ese ID");
+        Volver();
+        return;
+    }
+
+    //Verifica que el paciente tenga alguna consulta registrada
+    if (!listaTurnos.Any(turno => turno.IdPaciente == idPaciente))
+    {
+        Console.WriteLine("El paciente ingresado no tiene ninguna consulta registrada");
+        Volver();
+        return;
+    }
+
+    //Guarda en una lista todos los turnos del paciente
+    List<Turnos> listaFiltrada = listaTurnos.FindAll(turno => turno.IdPaciente == idPaciente);
+
+    //Ordena los turnos por fecha en orden descendiente
+    listaFiltrada.OrderByDescending(turno => turno.FechaTurno).ToList();
     //Muestra todos los turnos
-    listaTurnos.ForEach(turno => Console.WriteLine(turno));
+    listaFiltrada.ForEach(turno => Console.WriteLine(turno));
 
     Volver();
 }
@@ -644,7 +855,10 @@ void ListadoMedicos()
     Console.Clear();
     Console.WriteLine("=== Listado de médicos ===");
     listaMedicos = listaMedicos.OrderBy(medico => medico.Especialidad).ToList();
-    listaMedicos.ForEach(medico => Console.WriteLine(medico + $"\n"));
+    foreach (Medicos medico in listaMedicos)
+    {
+        Console.WriteLine($"Medico: {medico.Nombre} {medico.Apellido}, Matricula: {medico.Matricula}, Especialidad: {medico.Especialidad}");
+    }
 
     Volver();
 }
@@ -756,7 +970,7 @@ DateOnly LeerFecha(string campo)
     do
     {
         Console.WriteLine($"{campo}: ");
-        Console.Write("Ingrese el año:");
+        Console.Write("Ingrese el año: ");
         resultado3 = int.TryParse(Console.ReadLine()?.Trim(), out anio);
         if (!resultado3)
             Console.WriteLine("El año ingresado no es un numero. Intente nuevamente.");

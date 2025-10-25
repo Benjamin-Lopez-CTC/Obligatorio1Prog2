@@ -84,7 +84,7 @@ namespace Obli1Prog2
                     IdPaciente = 1,
                     IdMedicos = 2,
                     FechaTurno = new DateOnly(2025, 12, 04),
-                    HoraTurno = "16:00",
+                    HoraTurno = "12:00",
                     EstadoTurno = 1
                 }
             };
