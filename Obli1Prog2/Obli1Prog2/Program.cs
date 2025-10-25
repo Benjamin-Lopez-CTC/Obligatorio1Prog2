@@ -214,7 +214,7 @@ void MenuPagos()
         switch (opcion)
         {
             case "1":
-                //RegistrarPago();
+                RegistrarPago();
                 break;
 
             case "2":
@@ -222,7 +222,7 @@ void MenuPagos()
                 break;
 
             case "3":
-                // ConsultarPagos();
+                //ConsultarPagos();
                 break;
 
             case "0":
@@ -231,7 +231,7 @@ void MenuPagos()
 
             default:
                 Console.WriteLine("Valor no valido. Presione una tecla para continuar...");
-                Console.ReadKey().KeyChar.ToString();
+                Console.ReadKey();
                 break;
         }
     } while (!volver);
@@ -272,7 +272,7 @@ void EstadisticasReportes()
                 volver = true;
                 break;
             default:
-                Console.Write("Valor no válido. Presiona una tecla para continuar...");
+                Console.WriteLine("Valor no válido. Presiona una tecla para continuar...");
                 Console.ReadKey();
                 break;
 
@@ -287,7 +287,7 @@ void RegistrarPaciente()
 {
     // Limpia la pantalla y muestra el cabezal de la seccion
     Console.Clear();
-    Console.WriteLine("===== Registrar nuevo paciente =====\n");
+    Console.WriteLine("=== Registrar nuevo paciente ===\n");
 
     // Captura todos los datos del paciente nuevo
     string nombre = LeerTexto("Nombre");
@@ -303,7 +303,7 @@ void RegistrarPaciente()
     // Guarda todos los datos en un nuevo paciente y lo añade a la lista de paciente
     listaPacientes.Add(new Pacientes(nombre, apellido, numDocumento, fechaNacimiento, telefono, email, obraSocial, nombreUsuario, contrasenia));
 
-    Console.Write("Paciente agregado exitosamente.");
+    Console.Write("Paciente agregado exitosamente. ");
     Pausar();
 }
 
@@ -381,7 +381,7 @@ void VerDisponibilidad()
     do
     {
         Console.Clear();
-        Console.WriteLine("===== Disponibilidad =====");
+        Console.WriteLine("=== Disponibilidad ===");
         Console.WriteLine("1. Por médico");
         Console.WriteLine("2. Por especialidad");
         Console.WriteLine("0. Volver");
@@ -421,7 +421,7 @@ void NuevoDispMed()
         idMedico = LeerEntero("Ingrese el Id del médico a mostrar");
         if (!listaMedicos.Exists(medico => medico.IdMedico == idMedico))
         {
-            Console.WriteLine("No existe el médico ingresado");
+            Console.Write("No existe el médico ingresado. ");
             Pausar();
             Console.Clear();
         }
@@ -473,7 +473,7 @@ void NuevoDispEsp()
         {
             cadena = "Médico";
         }
-        Console.WriteLine($"{par.Key}: {par.Value} {cadena}");
+        Console.WriteLine($"{par.Key}: {par.Value} {cadena} ");
     }
 
     Volver();
@@ -486,7 +486,7 @@ void VerConsultas()
     Console.WriteLine("=== Consultas agendadas ===");
     if (listaTurnos.Count == 0)
     {
-        Console.WriteLine("No hay consultas agendadas actualmente.");
+        Console.Write("No hay consultas agendadas actualmente. ");
         Pausar();
     }
     else
@@ -516,7 +516,7 @@ void AgendarConsulta()
 
     // Limpia la pantalla y muestra el cabezal de la seccion
     Console.Clear();
-    Console.WriteLine("===== Agendar nueva consulta médica =====");
+    Console.WriteLine("=== Agendar nueva consulta médica ===");
 
     bool continuar = true;
     int paso = 0;
@@ -545,7 +545,7 @@ void AgendarConsulta()
                 if (!listaMedicos.Any(medico => medico.IdMedico == idMedico))
                 {
                     Console.WriteLine("No existe el médico, intente nuevamente...");
-                    paso = 0;
+                    paso = 1;
                     continue;
                 }
 
@@ -625,7 +625,7 @@ void AgendarConsulta()
                 // Por ultimo, guarda todos los datos en un objeto Turno y le asigna el estado como 1 (Agendado)
                 listaTurnos.Add(new Turnos(idPaciente, idMedico, fechaConsulta, horaString, 1));
 
-                Console.Write("Consulta agendada exitosamente.");
+                Console.Write("Consulta agendada exitosamente. ");
                 Volver();
                 continuar = false;
                 break;
@@ -652,7 +652,7 @@ void CancelarConsulta()
         idConsulta = LeerEntero("Ingrese el ID de la consulta a cancelar");
         if (!listaTurnos.Any(consulta => consulta.IdTurno == idConsulta))
         {
-            Console.WriteLine("No existe una consulta con ese ID. Presione una tecla para intentarlo nuevamente...");
+            Console.Write("No existe una consulta con ese ID. Presione una tecla para intentarlo nuevamente...");
             Console.ReadKey();
         }
     }
@@ -664,7 +664,7 @@ void CancelarConsulta()
     //Verifica que la consulta no este ya cancelada o realizada
     if (consultaElegida.EstadoTurno != 1)
     {
-        Console.WriteLine("La consulta ingresada ya fue realizada o cancelada. Presione una tecla para intentarlo nuevamente...");
+        Console.Write("La consulta ingresada ya fue realizada o cancelada. Presione una tecla para intentarlo nuevamente...");
         Console.ReadKey();
         return;
     }
@@ -679,7 +679,7 @@ void CancelarConsulta()
         confirmacion = LeerTexto("(Si / No)");
         if (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no")
         {
-            Console.WriteLine("Opcion invalida. Presione una telca para volver a intentar...");
+            Console.Write("Opcion invalida. Presione una telca para volver a intentar...");
             Console.ReadKey();
             Console.Clear();
         }
@@ -690,13 +690,13 @@ void CancelarConsulta()
     if (confirmacion.ToLower() == "si")
     {
         consultaElegida.EstadoTurno = 3;
-        Console.WriteLine("Consulta cancelada correctamente.");
+        Console.Write("Consulta cancelada correctamente. ");
         Volver();
     }
     //Si elige la opcion "No" la consulta no es cancelada
     else
     {
-        Console.WriteLine("Cancelacion anulada.");
+        Console.Write("Cancelacion anulada. ");
         Volver();
     }
 }
@@ -707,11 +707,11 @@ void ReprogramarConsulta()
     var idioma = new System.Globalization.CultureInfo("es-ES");
 
     Console.Clear();
-    Console.WriteLine("===== Reprogramar consulta =====");
+    Console.WriteLine("=== Reprogramar consulta ===");
     //Verifica que la lista de consultas no este vacia.
     if (listaTurnos.Count == 0)
     {
-        Console.Write("No hay consultas agendadas en este momento.");
+        Console.Write("No hay consultas agendadas en este momento. ");
         Volver();
         return;
     }
@@ -720,7 +720,7 @@ void ReprogramarConsulta()
     int idConsulta = LeerEntero("Ingrese el ID de la consulta a reporogramar");
     if (!listaTurnos.Exists(turno => turno.IdTurno == idConsulta))
     {
-        Console.Write("No se encontro una consulta con ese ID.");
+        Console.Write("No se encontro una consulta con ese ID. ");
         Volver();
         return;
     }
@@ -731,7 +731,7 @@ void ReprogramarConsulta()
     //Verifica que la consulta no esté ya realizada o cancelada
     if (consultaElegida.EstadoTurno == 2 || consultaElegida.EstadoTurno == 3)
     {
-        Console.WriteLine("La consulta elegida ya fue realizada o cancelada.");
+        Console.Write("La consulta elegida ya fue realizada o cancelada. ");
         Volver();
         return;
     }
@@ -749,7 +749,7 @@ void ReprogramarConsulta()
     //Verifica que el medico ofrezca esa hora
     if (!horarios.Any(hora => (hora.HoraConsulta == nuevaHora) && (hora.DiaConsulta == nombreDia)))
     {
-        Console.WriteLine("Esa hora no la ofrece el medico, intente nuevamente");
+        Console.Write("Esa hora no la ofrece el medico, intente nuevamente. ");
         Volver();
         return;
     }
@@ -757,7 +757,7 @@ void ReprogramarConsulta()
     var horaConsulta = horarios.Find(hora => (hora.HoraConsulta == nuevaHora) && (hora.DiaConsulta == nombreDia))!;
     if (horaConsulta.IdPaciente != 0)
     {
-        Console.WriteLine("Esa hora ya está agendada, intente nuevamente.");
+        Console.Write("Esa hora ya está agendada, intente nuevamente. ");
         Volver();
         return;
     }
@@ -771,7 +771,7 @@ void ReprogramarConsulta()
         confirmacion = LeerTexto("(Si / No)");
         if (confirmacion.ToLower() != "si" && confirmacion.ToLower() != "no")
         {
-            Console.WriteLine("Opcion invalida. Presione una telca para volver a intentar...");
+            Console.Write("Opcion invalida. Presione una telca para volver a intentar...");
             Console.ReadKey();
             Console.Clear();
         }
@@ -783,13 +783,13 @@ void ReprogramarConsulta()
     {
         consultaElegida.FechaTurno = nuevaFecha;
         consultaElegida.HoraTurno = nuevaHora;
-        Console.WriteLine("Consulta reprogramada correctamente.");
+        Console.Write("Consulta reprogramada correctamente. ");
         Volver();
     }
     //Si el usuario elige la opcion "No" la reprogramacion es cancelada
     else
     {
-        Console.WriteLine("Reprogramacion cancelada.");
+        Console.Write("Reprogramacion cancelada. ");
         Volver();
     }
 }
@@ -798,14 +798,14 @@ void ReprogramarConsulta()
 void HistorialConsultas()
 {
     Console.Clear();
-    Console.WriteLine("===== Historial de consultas por paciente =====");
+    Console.WriteLine("=== Historial de consultas por paciente ===");
 
     //Se pide el ID del paciente y verifica que exista
     int idPaciente = LeerEntero("Ingrese el ID del paciente");
 
     if (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente))
     {
-        Console.WriteLine("No se encontro un paciente con ese ID");
+        Console.Write("No se encontro un paciente con ese ID. ");
         Volver();
         return;
     }
@@ -813,7 +813,7 @@ void HistorialConsultas()
     //Verifica que el paciente tenga alguna consulta registrada
     if (!listaTurnos.Any(turno => turno.IdPaciente == idPaciente))
     {
-        Console.WriteLine("El paciente ingresado no tiene ninguna consulta registrada");
+        Console.Write("El paciente ingresado no tiene ninguna consulta registrada. ");
         Volver();
         return;
     }
@@ -828,6 +828,83 @@ void HistorialConsultas()
 
     Volver();
 }
+#endregion
+
+#region Metodos menú 3
+// Metodo para registrar un nuevo pago de turno
+void RegistrarPago()
+{
+    Console.Clear();
+    Console.WriteLine("=== Registrar nuevo pago ===");
+    
+    // Inicializa todos los datos que se deben obtener
+    int idTurno = 0;
+    DateOnly fechaPago = new DateOnly(2026, 12, 31);
+    int monto = 0;
+    string metodo = "";
+
+    // Verifica si la consulta existe o si ya tiene asignada un pago
+    do
+    {
+        idTurno = LeerEntero("Id de la consulta a pagar");
+        if (!listaTurnos.Exists(turno => turno.IdTurno == idTurno))
+            Console.WriteLine("No existe la consulta. Intente nuevamente.");
+        else if (listaPagos.Exists(pago => pago.IdTurno == idTurno))
+            Console.WriteLine("Esa consulta ya tiene un pago registrado. Intente nuevamente.");
+    } while (!listaTurnos.Exists(turno => turno.IdTurno == idTurno) || listaPagos.Exists(pago => pago.IdTurno == idTurno));
+
+    // Captura el turno correspondiente al Id ingresado y muestra info relevante para facilitar el proceso
+    Turnos turno = listaTurnos.Find(turno => turno.IdTurno == idTurno)!;
+    Console.WriteLine($"Turno: ID: {turno.IdTurno}, Fecha: {turno.FechaTurno}, Hora: {turno.HoraTurno}");
+
+    // Solo se puede registrar un pago posterior a la fecha de cuando se agendo la consulta
+    do
+    {
+        fechaPago = LeerFecha("Fecha de pago");
+        if (fechaPago < turno.FechaTurno)
+            Console.WriteLine("La fecha de pago no puede ser anterior a cuando se agendó la consulta. Intente nuevamente.");
+    } while (fechaPago < turno.FechaTurno);
+
+    monto = LeerEntero("Monto");
+
+    Console.WriteLine("Elija el método de pago: ");
+    Console.WriteLine("1. Efectivo");
+    Console.WriteLine("2. Débito");
+    Console.WriteLine("3. Crédito");
+    Console.WriteLine("4. Transferencia bancaria");
+
+    Console.Write("Opción: ");
+    string opcion = Console.ReadKey().KeyChar.ToString();
+    switch (opcion)
+    {
+        case "1":
+            metodo = "Efectivo";
+            break;
+
+        case "2":
+            metodo = "Débito";
+            break;
+
+        case "3":
+            metodo = "Crédito";
+            break;
+
+        case "4":
+            metodo = "Transferencia bancaria";
+            break;
+
+        default:
+            Console.WriteLine("Valor no válido. Presione una tecla para continuar...");
+            Console.ReadKey();
+            break;
+    }
+
+    // Toma todos los datos, crea un nuevo objeto Pagos y lo guarda en la lista de pagos existente
+    listaPagos.Add(new Pagos(idTurno, fechaPago, monto, metodo));
+    Console.WriteLine("\nPago registrado exitosamente. ");
+    Volver();
+}
+
 #endregion
 
 #region Metodos menú 4
@@ -996,16 +1073,16 @@ DateOnly LeerFecha(string campo)
         resultado2 = int.TryParse(Console.ReadLine()?.Trim(), out dia);
         if (!resultado2)
             Console.WriteLine("El dia ingresado no es un numero. Intente nuevamente.");
-        else if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && (dia < 1 && dia > 30))
+        else if ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && (dia < 1 || dia > 30))
             Console.WriteLine("El dia ingresado no puede ser mayor a 30. Intente nuevamente.");
-        else if ((mes == 2) && DateTime.IsLeapYear(anio) && (dia < 1 && dia > 29))
+        else if ((mes == 2) && DateTime.IsLeapYear(anio) && (dia < 1 || dia > 29))
             Console.WriteLine("El dia ingresado no puede ser mayor a 29. Intente nuevamente.");
         else if ((mes == 2) && (dia < 1 && dia > 28))
             Console.WriteLine("El dia ingresado no puede ser mayor a 28. Intente nuevamente.");
         else if (dia < 1 && dia > 31)
             Console.WriteLine("El mes ingresado no puede ser mayor a 31. Intente nuevamente.");
-    } while (!resultado2 || ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && (dia < 1 && dia > 30)) || ((mes == 2) && DateTime.IsLeapYear(anio) && (dia < 1 && dia > 29)) ||
-        ((mes == 2) && (dia < 1 && dia > 28)) || (dia < 1 && dia > 31));
+    } while (!resultado2 || ((mes == 4 || mes == 6 || mes == 9 || mes == 11) && (dia < 1 || dia > 30)) || ((mes == 2) && DateTime.IsLeapYear(anio) && (dia < 1 || dia > 29)) ||
+        ((mes == 2) && (dia < 1 || dia > 28)) || (dia < 1 || dia > 31));
 
     // Se necesita guardar en una variable tipo var el formato de calendario necesitado
     var calendarioGregoriano = new System.Globalization.GregorianCalendar();

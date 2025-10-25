@@ -19,10 +19,10 @@ namespace Obli1Prog2
         #endregion
 
         #region Constructores
-        public Pagos(Turnos idTurno, DateOnly fechaPago, double monto, string metodoPago)
+        public Pagos(int idTurno, DateOnly fechaPago, double monto, string metodoPago)
         {
             IdPago = ContadorID++;
-            IdTurno = idTurno.IdTurno;
+            IdTurno = idTurno;
             FechaPago = fechaPago;
             Monto = monto;
             MetodoPago = metodoPago;
