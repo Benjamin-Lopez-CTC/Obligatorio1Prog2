@@ -43,6 +43,7 @@ namespace Obli1Prog2
             return $"Turno: ID Turno: {IdTurno}, ID Paciente: {IdPaciente}, ID Medico: {IdMedicos}, Fecha: {FechaTurno}, Hora: {HoraTurno}, Estado: {estado}";
         }
 
+        // Metodo de carga de datos para el arranque
         public static List<Turnos> CargarTurnos()
         {
             return new List<Turnos>
@@ -85,7 +86,7 @@ namespace Obli1Prog2
                     IdMedicos = 2,
                     FechaTurno = new DateOnly(2025, 12, 04),
                     HoraTurno = "12:00",
-                    EstadoTurno = 1
+                    EstadoTurno = 2
                 }
             };
 

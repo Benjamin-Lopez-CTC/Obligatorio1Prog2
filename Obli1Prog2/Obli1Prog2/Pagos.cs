@@ -40,6 +40,7 @@ namespace Obli1Prog2
             return $"Pago: ID Pago: {IdPago}, ID Turno: {IdTurno}, Fecha de pago: {FechaPago}, Monto: {Monto}, Metodo de pago: {MetodoPago}";
         }
 
+        // Metodo de carga de datos para el arranque
         public static List<Pagos> CargarPagos() 
         {
             return new List<Pagos>()

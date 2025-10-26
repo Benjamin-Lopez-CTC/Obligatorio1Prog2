@@ -49,6 +49,8 @@ namespace Obli1Prog2
             return $"Médico: ID: {IdMedico}, Nombre: {Nombre}, Apellido {Apellido}, Especialidad: {Especialidad}, Matricula: {Matricula}, Dias de atención: {dias}, Horarios: {horas}";
         }
 
+        // Metodo que genera una lista de cadenas de texto en formato horario, separado en incrementos de 30 minutos
+        // La cantidad depende de los dias ingresados y el rango de tiempo especificado
         private static List<Hora> GenerarHorarios(string[] dias, TimeSpan inicio, TimeSpan fin)
         {
             var lista = new List<Hora>();
@@ -63,6 +65,7 @@ namespace Obli1Prog2
             return lista;
         }
 
+        // Metodo de carga de datos en arranque
         public static List<Medicos> CargarMedicos()
         {
             return new List<Medicos>

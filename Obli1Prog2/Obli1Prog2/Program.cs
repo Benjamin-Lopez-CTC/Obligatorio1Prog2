@@ -13,9 +13,9 @@ List<Pagos> listaPagos = Pagos.CargarPagos();
 Dictionary<string, string> contrReps = GuardarContrReps();
 
 ActualizarDatos();
-/*
+
 Login(); // Desactivado para agilizar pruebas
-*/
+
 do
 {
     MostrarMenuPrincipal();
@@ -81,6 +81,7 @@ void Login()
             }
         } while (!contrReps.ContainsKey(usuario));
 
+        // Intenta encontrar la clave en el diccionario de contraseñas con el mismo valor que el ingresado
         contrasenia = LeerContrasenia("Contraseña");
         if (contrReps[usuario] != contrasenia)
         {
@@ -218,11 +219,11 @@ void MenuPagos()
                 break;
 
             case "2":
-                //EmitirComprobante();
+                EmitirComprobante();
                 break;
 
             case "3":
-                //ConsultarPagos();
+                ConsultarPagos();
                 break;
 
             case "0":
@@ -304,7 +305,7 @@ void RegistrarPaciente()
     listaPacientes.Add(new Pacientes(nombre, apellido, numDocumento, fechaNacimiento, telefono, email, obraSocial, nombreUsuario, contrasenia));
 
     Console.Write("Paciente agregado exitosamente. ");
-    Pausar();
+    Volver();
 }
 
 //Metodo para cambiar la contraseña del usuario recepcionista.
@@ -360,16 +361,8 @@ void CambiarCont()
 
     //Se actualiza la contraseña.
     contrReps[usuario] = nuevaCont;
-    Console.WriteLine("Contrasña actualizada correctamente.");
-    Console.ReadKey();
-
-    //foreach para verificar que se cambio la contraseña. (temporal).
-    foreach (var usuarioo in contrReps)
-    {
-        Console.WriteLine(usuarioo);
-    }
-    Console.ReadKey();
-
+    Console.WriteLine("Contrasña actualizada correctamente. ");
+    Volver();
 }
 #endregion
 
@@ -442,7 +435,7 @@ void NuevoDispMed()
         Console.WriteLine($"{dia}: \n {string.Join(", ", horaString)}\n");
     }
 
-    Pausar();
+    Volver();
 }
 
 //Metodo para mostrar cada especialidad con la cantidad de medicos disponibles de cada una
@@ -495,7 +488,7 @@ void VerConsultas()
         {
             Console.WriteLine(turno);
         }
-        Pausar();
+        Volver();
     }
 }
 
@@ -813,7 +806,7 @@ void HistorialConsultas()
     //Verifica que el paciente tenga alguna consulta registrada
     if (!listaTurnos.Any(turno => turno.IdPaciente == idPaciente))
     {
-        Console.Write("El paciente ingresado no tiene ninguna consulta registrada. ");
+        Console.Write("El paciente ingresado no tiene ninguna consulta registrada.");
         Volver();
         return;
     }
@@ -822,7 +815,7 @@ void HistorialConsultas()
     List<Turnos> listaFiltrada = listaTurnos.FindAll(turno => turno.IdPaciente == idPaciente);
 
     //Ordena los turnos por fecha en orden descendiente
-    listaFiltrada.OrderByDescending(turno => turno.FechaTurno).ToList();
+    listaFiltrada.OrderByDescending(turno => turno.EstadoTurno).ToList();
     //Muestra todos los turnos
     listaFiltrada.ForEach(turno => Console.WriteLine(turno));
 
@@ -905,6 +898,103 @@ void RegistrarPago()
     Volver();
 }
 
+// Metodo que genera un archivo de texto .txt con los datos del pago solicitado
+void EmitirComprobante()
+{
+    Console.Clear();
+    Console.WriteLine("=== Emitir comprobante de pago ===");
+
+    int idPago = 0;
+
+    // Si no hay pagos
+    if (listaPagos.Count == 0)
+    {
+        Console.WriteLine("No hay pagos de los cuales emitir un comprobante.");
+        Volver();
+        return;
+    }
+
+    // Valida que el id del pago ingresado exista en la lista
+    do
+    {
+        idPago = LeerEntero("Ingrese el Id del pago del cual emitir el comprobante");
+        if (!listaPagos.Exists(pago => pago.IdPago == idPago))
+            Console.WriteLine("No existe ese pago. Intente nuevamente.");
+    } while (!listaPagos.Exists(pago => pago.IdPago == idPago));
+
+    // Captura el pago con el mismo id que el ingresado
+    Pagos pagoAEmitir = listaPagos.Find(pago => pago.IdPago == idPago)!;
+
+    // Ruta del archivo donde se guarda el comprobante de pago por defecto -> string rutaArchivo = "compPagoX.txt";
+    // Con esta variación los archivos se guardan en el escritorio
+    // El nombre del archivo cambia dependiendo del id del comprobante solicitado
+    string rutaArchivo = Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.Desktop),
+        $"compPago{pagoAEmitir.IdPago}.txt"
+    );
+
+    // Usamos StreamWriter para escribir el archivo
+    using StreamWriter escritor = new(rutaArchivo);
+
+    // Cada dato se separa con un salto de linea
+    escritor.WriteLine($"Pago: \nID del pago: {pagoAEmitir.IdPago} \nID del turno a pagar: {pagoAEmitir.IdTurno} \nMonto total: {pagoAEmitir.Monto} \nMétodo de pago: {pagoAEmitir.MetodoPago} \nFecha de pago: {pagoAEmitir.FechaPago}");
+
+    Console.WriteLine("");
+    Console.Write("Comprobante emitido exitosamente, lo podrás encontrar en el escritorio. ");
+    Volver();
+}
+
+//Metodo para consultar los pagos registrados de un paciente
+void ConsultarPagos()
+{
+    Console.Clear();
+    Console.WriteLine("=== Consultar pagos por paciente ===");
+    //Verifica que hayan pagos registrados
+    if (listaPagos.Count == 0)
+    {
+        Console.WriteLine("No hay pagos registrados en este momento.");
+        Volver();
+        return;
+    }
+    //Pide el ID del paciente a consultar
+    int idPaciente = LeerEntero("Ingrese el id del paciente");
+    if (!listaPacientes.Any(paciente => paciente.IdPaciente == idPaciente))
+    {
+        Console.WriteLine("No se encontro un paciente con ese ID");
+        Volver();
+        return;
+    }
+    //Crea una lista de los turnos del paciente
+    List<Turnos> listaFiltrada = listaTurnos.FindAll(turno => turno.IdPaciente == idPaciente);
+    //Crea una lista para agregarle solo las IDs de los turnos del paciente
+    List<int> ListaIDs = new List<int>();
+    foreach (Turnos turno in listaFiltrada)
+    {
+        ListaIDs.Add(turno.IdTurno);
+    }
+    //Crea una lista donde se guarda el pago que tenga el ID del turno
+    List<Pagos> listaPagosF = new List<Pagos>();
+    foreach (int id in ListaIDs)
+    {
+        Pagos pago = listaPagos.Find(pago => pago.IdTurno == id)!;
+        listaPagosF.Add(pago);
+    }
+    //Verifica que hayan pagos con ese ID de turno
+    if (listaPagosF.Count == 0)
+    {
+        Console.WriteLine("El paciente ingresado no tiene pagos registrados");
+        Volver();
+        return;
+    }
+    //Muestra todos los pagos
+    foreach (Pagos pago in listaPagosF)
+    {
+        Console.WriteLine(pago + "\n");
+    }
+
+    Volver();
+}
+
 #endregion
 
 #region Metodos menú 4
@@ -933,6 +1023,7 @@ void ListadoMedicos()
     Console.WriteLine("=== Listado de médicos ===");
     listaMedicos = listaMedicos.OrderBy(medico => medico.Especialidad).ToList();
     foreach (Medicos medico in listaMedicos)
+       
     {
         Console.WriteLine($"Medico: {medico.Nombre} {medico.Apellido}, Matricula: {medico.Matricula}, Especialidad: {medico.Especialidad}");
     }
@@ -1106,7 +1197,7 @@ string LeerHora()
     return valor;
 }
 
-// Metodo para ingresar un email
+// Metodo para ingresar un email, valida que la cadena ingresada contenga los caracteres '@' y '.'
 string LeerEmail()
 {
     string? valor;
@@ -1127,7 +1218,7 @@ string LeerEmail()
     return valor;
 }
 
-// Metodo para ingresar una contraseña
+// Metodo para ingresar una contraseña, valida que la cadena ingresada sea mayor a 8 digitos o que no este vacía
 string LeerContrasenia(string campo)
 {
     string? valor;
@@ -1148,7 +1239,7 @@ string LeerContrasenia(string campo)
     return valor;
 }
 
-// Metodo para ingresar un documento de identidad
+// Metodo para ingresar un documento de identidad, valida que la cadena ingresada sea exactamente de 8 digitos
 int LeerDocumento()
 {
     int documento;
