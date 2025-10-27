@@ -361,7 +361,7 @@ void CambiarCont()
 
     //Se actualiza la contraseña.
     contrReps[usuario] = nuevaCont;
-    Console.WriteLine("Contrasña actualizada correctamente. ");
+    Console.WriteLine("Contraseña actualizada correctamente. ");
     Volver();
 }
 #endregion
@@ -1325,4 +1325,5 @@ static void Volver()
     Console.WriteLine("Presione una tecla para volver...");
     Console.ReadKey();
 }
+
 #endregion
