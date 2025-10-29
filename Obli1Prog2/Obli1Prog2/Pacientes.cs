@@ -43,7 +43,7 @@ namespace Obli1Prog2
         #region Metodos
         public override string ToString()
         {
-        return$"Paciente: ID: {IdPaciente}, Nombre: {Nombre}, Apellido: {Apellido}, Numero de documento: {NumDocumentoP}, Fecha de nacimiento: {FechaNacimiento}, Telefono: {Telefono}, Email: {Email}, Obra social: {ObraSocial}";
+        return$"Paciente: \nID: {IdPaciente} \nNombre: {Nombre} \nApellido: {Apellido} \nNumero de documento: {NumDocumentoP} \nFecha de nacimiento: {FechaNacimiento} \nTelefono: {Telefono} \nEmail: {Email} \nObra social: {ObraSocial}";
         }
 
         // Metodo de carga de datos para el arranque
