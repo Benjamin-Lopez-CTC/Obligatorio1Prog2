@@ -38,8 +38,7 @@ namespace Obli1Prog2
                 new Recepcionistas("Martín", "Pérez", 28765432, "martin.p", "M4rt!nP87"),
                 new Recepcionistas("Carolina", "Garcia", 32987654, "cgarcia", "C@ro2024"),
                 new Recepcionistas("Javier", "Sosa", 24567891, "javi_sosa", "J4v!er91"),
-                new Recepcionistas("Florencia", "Ramos", 31415926, "flor.ramos", "Fl0r#159"),
-                new Recepcionistas("prueba", "login", 31234324, "prueba", "pruebacontra")
+                new Recepcionistas("Florencia", "Ramos", 31415926, "flor.ramos", "Fl0r#159")
             };
 
         }

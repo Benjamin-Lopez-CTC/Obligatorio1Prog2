@@ -361,7 +361,7 @@ void CambiarCont()
 
     //Se actualiza la contraseña.
     contrReps[usuario] = nuevaCont;
-    Console.WriteLine("Contraseña actualizada correctamente. ");
+    Console.WriteLine("Contrasña actualizada correctamente. ");
     Volver();
 }
 #endregion
@@ -811,13 +811,11 @@ void HistorialConsultas()
         return;
     }
 
-    //Guarda en una lista todos los turnos del paciente
-    List<Turnos> listaFiltrada = listaTurnos.FindAll(turno => turno.IdPaciente == idPaciente);
+    //Guarda en una lista todos los turnos del paciente y los ordena por estado en orden descendiente
+    List<Turnos> listaOrdenada = listaTurnos.FindAll(turno => turno.IdPaciente == idPaciente).OrderByDescending(turno => turno.EstadoTurno).ToList();
 
-    //Ordena los turnos por fecha en orden descendiente
-    listaFiltrada.OrderByDescending(turno => turno.EstadoTurno).ToList();
     //Muestra todos los turnos
-    listaFiltrada.ForEach(turno => Console.WriteLine(turno));
+    listaOrdenada.ForEach(turno => Console.WriteLine(turno));
 
     Volver();
 }
@@ -833,6 +831,7 @@ void RegistrarPago()
     // Inicializa todos los datos que se deben obtener
     int idTurno = 0;
     DateOnly fechaPago = new DateOnly(2026, 12, 31);
+    DateOnly diaHoy = DateOnly.FromDateTime(DateTime.Now);
     int monto = 0;
     string metodo = "";
 
@@ -850,13 +849,13 @@ void RegistrarPago()
     Turnos turno = listaTurnos.Find(turno => turno.IdTurno == idTurno)!;
     Console.WriteLine($"Turno: ID: {turno.IdTurno}, Fecha: {turno.FechaTurno}, Hora: {turno.HoraTurno}");
 
-    // Solo se puede registrar un pago posterior a la fecha de cuando se agendo la consulta
+    // Solo se puede registrar un pago posterior a la fecha de mañana
     do
     {
         fechaPago = LeerFecha("Fecha de pago");
-        if (fechaPago < turno.FechaTurno)
-            Console.WriteLine("La fecha de pago no puede ser anterior a cuando se agendó la consulta. Intente nuevamente.");
-    } while (fechaPago < turno.FechaTurno);
+        if (fechaPago < diaHoy.AddDays(1))
+            Console.WriteLine("La fecha de pago no puede ser anterior a la fecha de mañana. Intente nuevamente.");
+    } while (fechaPago < diaHoy.AddDays(1));
 
     monto = LeerEntero("Monto");
 
@@ -940,7 +939,7 @@ void EmitirComprobante()
     escritor.WriteLine($"Pago: \nID del pago: {pagoAEmitir.IdPago} \nID del turno a pagar: {pagoAEmitir.IdTurno} \nMonto total: {pagoAEmitir.Monto} \nMétodo de pago: {pagoAEmitir.MetodoPago} \nFecha de pago: {pagoAEmitir.FechaPago}");
 
     Console.WriteLine("");
-    Console.Write("Comprobante emitido exitosamente, lo podrás encontrar en el escritorio. ");
+    Console.Write("Comprobante emitido exitosamente, lo podrás encontrar en el escritorio tras salir de este menú.\n");
     Volver();
 }
 
@@ -1325,5 +1324,4 @@ static void Volver()
     Console.WriteLine("Presione una tecla para volver...");
     Console.ReadKey();
 }
-
 #endregion
